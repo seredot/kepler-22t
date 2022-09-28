@@ -91,6 +91,7 @@ func (g *Game) gameLoop() {
 				g.screen.Sync()
 			case *tcell.EventKey:
 				key := ev.Key()
+				keyRune := ev.Rune()
 
 				if key == tcell.KeyEscape || key == tcell.KeyCtrlC {
 					g.screen.Fini()
@@ -103,6 +104,8 @@ func (g *Game) gameLoop() {
 					g.player.direction(0, -1)
 				} else if key == tcell.KeyDown {
 					g.player.direction(0, 1)
+				} else if keyRune == ' ' {
+					g.player.fire()
 				}
 			}
 		}
@@ -112,7 +115,7 @@ func (g *Game) gameLoop() {
 		g.drawBorders()
 		g.player.draw()
 
-		g.drawText(2, g.height-1, fmt.Sprintf("Fr %d | FPS %0.2f", g.frame, 1000.0/float64(g.deltaT)))
+		g.drawText(2, g.height-1, fmt.Sprintf(" Fr %d | FPS %0.2f ", g.frame, 1000.0/float64(g.deltaT)))
 
 		g.frame++
 		g.screen.Sync()

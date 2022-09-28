@@ -34,9 +34,9 @@ func (o *Object) move() {
 }
 
 func (o *Object) scrX() int {
-	return int(o.x)
+	return int(math.Round(o.x))
 }
 
 func (o *Object) scrY() int {
-	return int(o.y)
+	return int(math.Round(o.y))
 }

@@ -8,11 +8,12 @@ type Bullet struct {
 func NewBullet(game *Game, x, y, dx, dy, speed float64) *Bullet {
 	b := &Bullet{
 		Object: Object{
-			game: game,
-			x:    float64(x) - 1,
-			y:    float64(y),
-			dx:   dx,
-			dy:   dy,
+			game:  game,
+			x:     float64(x),
+			y:     float64(y),
+			dx:    dx,
+			dy:    dy,
+			speed: speed,
 		},
 		sprite: '•',
 	}

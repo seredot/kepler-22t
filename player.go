@@ -2,7 +2,8 @@ package main
 
 type Player struct {
 	Object
-	sprite rune
+	sprite  rune
+	bullets []*Bullet
 }
 
 func NewPlayer(game *Game, x, y int) *Player {
@@ -15,7 +16,8 @@ func NewPlayer(game *Game, x, y int) *Player {
 			dy:   0,
 			drag: 20,
 		},
-		sprite: 'X',
+		sprite:  'X',
+		bullets: []*Bullet{},
 	}
 
 	p.direction(p.dx, p.dy)
@@ -42,4 +44,12 @@ func (p *Player) direction(dx, dy float64) {
 func (p *Player) draw() {
 	p.move()
 	p.game.screen.SetContent(p.scrX(), p.scrY(), p.sprite, nil, p.game.defStyle)
+
+	for _, b := range p.bullets {
+		b.draw()
+	}
+}
+
+func (p *Player) fire() {
+	p.bullets = append(p.bullets, NewBullet(p.game, p.x, p.y, p.dx, p.dy, 50))
 }
