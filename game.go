@@ -85,7 +85,6 @@ func (g *Game) gameLoop() {
 	for {
 		if g.screen.HasPendingEvent() {
 			ev := g.screen.PollEvent()
-			// Process event
 			switch ev := ev.(type) {
 			case *tcell.EventResize:
 				g.screen.Sync()
