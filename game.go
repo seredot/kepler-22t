@@ -115,6 +115,9 @@ func (g *Game) gameLoop() {
 		g.drawBorders()
 		g.player.draw()
 
+		// Title
+		g.drawText(2, 0, " Tr@sh ")
+		// Stats
 		g.drawText(2, g.height-1, fmt.Sprintf(" Fr %d | FPS %0.2f ", g.frame, 1000.0/float64(g.deltaT)))
 
 		g.frame++
