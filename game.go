@@ -78,46 +78,52 @@ func (g *Game) drawText(x, y int, text string) {
 	}
 }
 
-func (g *Game) gameLoop() {
+func (g *Game) drawHud() {
+	// Title
+	g.drawText(2, 0, " Tr@sh ")
+	// Stats
+	g.drawText(2, g.height-1, fmt.Sprintf(" Fr %d | FPS %0.2f ", g.frame, 1000.0/float64(g.deltaT)))
+}
+
+func (g *Game) processKeyboard() {
+	for g.screen.HasPendingEvent() {
+		ev := g.screen.PollEvent()
+		switch ev := ev.(type) {
+		case *tcell.EventResize:
+			g.screen.Sync()
+		case *tcell.EventKey:
+			key := ev.Key()
+			keyRune := ev.Rune()
+
+			if key == tcell.KeyEscape || key == tcell.KeyCtrlC {
+				g.screen.Fini()
+				os.Exit(0)
+			} else if key == tcell.KeyLeft {
+				g.player.direction(-1, 0)
+			} else if key == tcell.KeyRight {
+				g.player.direction(1, 0)
+			} else if key == tcell.KeyUp {
+				g.player.direction(0, -1)
+			} else if key == tcell.KeyDown {
+				g.player.direction(0, 1)
+			} else if keyRune == ' ' {
+				g.player.fire()
+			}
+		}
+	}
+}
+
+func (g *Game) loop() {
 	lastFrameT := time.Now().UnixMilli()
 	g.deltaT = 10
 
 	for {
-		if g.screen.HasPendingEvent() {
-			ev := g.screen.PollEvent()
-			switch ev := ev.(type) {
-			case *tcell.EventResize:
-				g.screen.Sync()
-			case *tcell.EventKey:
-				key := ev.Key()
-				keyRune := ev.Rune()
-
-				if key == tcell.KeyEscape || key == tcell.KeyCtrlC {
-					g.screen.Fini()
-					os.Exit(0)
-				} else if key == tcell.KeyLeft {
-					g.player.direction(-1, 0)
-				} else if key == tcell.KeyRight {
-					g.player.direction(1, 0)
-				} else if key == tcell.KeyUp {
-					g.player.direction(0, -1)
-				} else if key == tcell.KeyDown {
-					g.player.direction(0, 1)
-				} else if keyRune == ' ' {
-					g.player.fire()
-				}
-			}
-		}
-
+		g.processKeyboard()
 		g.calcScreenSize()
 		g.screen.Clear()
 		g.drawBorders()
 		g.player.draw()
-
-		// Title
-		g.drawText(2, 0, " Tr@sh ")
-		// Stats
-		g.drawText(2, g.height-1, fmt.Sprintf(" Fr %d | FPS %0.2f ", g.frame, 1000.0/float64(g.deltaT)))
+		g.drawHud()
 
 		g.frame++
 		g.screen.Sync()
@@ -130,7 +136,7 @@ func (g *Game) gameLoop() {
 			g.deltaT = 100
 		}
 
-		// Limit to 100 fps
+		// Limit to 30 fps
 		time.Sleep(time.Duration(33-g.deltaT) * time.Millisecond)
 	}
 }
