@@ -19,6 +19,26 @@ type Game struct {
 	deltaT   int64
 }
 
+func (g *Game) init() {
+	g.defStyle = tcell.StyleDefault.Background(tcell.ColorReset).Foreground(tcell.ColorReset).Blink(false)
+
+	// Initialize screen
+	s, err := tcell.NewScreen()
+	if err != nil {
+		log.Fatalf("%+v", err)
+	}
+	if err := s.Init(); err != nil {
+		log.Fatalf("%+v", err)
+	}
+	g.screen = s
+	g.calcScreenSize()
+	s.SetStyle(g.defStyle)
+	s.Clear()
+
+	// Player initials
+	g.player = NewPlayer(g, 10, 10)
+}
+
 func (g *Game) calcScreenSize() {
 	screenWidth, screenHeight := g.screen.Size()
 	w, h := 80, 40
@@ -56,26 +76,6 @@ func (g *Game) drawText(x, y int, text string) {
 	for i, r := range []rune(text) {
 		g.screen.SetContent(x+i, y, r, nil, g.defStyle)
 	}
-}
-
-func (g *Game) init() {
-	g.defStyle = tcell.StyleDefault.Background(tcell.ColorReset).Foreground(tcell.ColorReset).Blink(true)
-
-	// Initialize screen
-	s, err := tcell.NewScreen()
-	if err != nil {
-		log.Fatalf("%+v", err)
-	}
-	if err := s.Init(); err != nil {
-		log.Fatalf("%+v", err)
-	}
-	g.screen = s
-	g.calcScreenSize()
-	s.SetStyle(g.defStyle)
-	s.Clear()
-
-	// Player initials
-	g.player = NewPlayer(g, 10, 10)
 }
 
 func (g *Game) gameLoop() {

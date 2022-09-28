@@ -1,6 +1,10 @@
 package main
 
-import "math"
+import (
+	"math"
+
+	"github.com/gdamore/tcell/v2"
+)
 
 type Object struct {
 	game   *Game
@@ -8,6 +12,8 @@ type Object struct {
 	dx, dy float64
 	speed  float64
 	drag   float64
+	sprite rune
+	color  tcell.Color
 }
 
 func (o *Object) move() {
@@ -39,4 +45,9 @@ func (o *Object) scrX() int {
 
 func (o *Object) scrY() int {
 	return int(math.Round(o.y))
+}
+
+func (o *Object) draw() {
+	o.move()
+	o.game.screen.SetContent(o.scrX(), o.scrY(), o.sprite, nil, o.game.defStyle.Foreground(o.color))
 }
