@@ -11,6 +11,10 @@ func (g *Game) ResetStyle() {
 	g.style = g.defStyle
 }
 
+func (g *Game) Background(c style.Color) {
+	g.style = style.Style(tcell.Style(g.style).Background(tcell.Color(c)))
+}
+
 func (g *Game) Foreground(c style.Color) {
 	g.style = style.Style(tcell.Style(g.style).Foreground(tcell.Color(c)))
 }
@@ -60,4 +64,6 @@ func (g *Game) drawHud() {
 	g.drawText(2, 0, " Tr@sh ")
 	// Stats
 	g.drawText(2, g.height-1, fmt.Sprintf(" Fr %d | FPS %0.2f ", g.frame, 1000.0/float64(g.deltaT)))
+	// Debug log
+	g.drawText(22, g.height-1, fmt.Sprintf(" Color %d %x ", g.screen.Colors(), style.Hsl2Rgb(242, 26, 43)))
 }

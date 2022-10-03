@@ -12,8 +12,12 @@ type Game struct {
 	screen   tcell.Screen
 	defStyle style.Style
 	style    style.Style
-	width    int
-	height   int
+	width    int // screen width
+	height   int // screen height
+	left     int // left most playable area
+	right    int // right most playable area
+	top      int // top most playable area
+	bottom   int //  bottom most playable area
 	player   *Player
 	frame    int
 	deltaT   int64
@@ -52,6 +56,11 @@ func (g *Game) calcScreenSize() {
 
 	g.width = w
 	g.height = h
+
+	g.left = 1
+	g.right = g.width - 2
+	g.top = 1
+	g.bottom = g.height - 2
 }
 
 func (g *Game) loop() {
@@ -66,6 +75,7 @@ func (g *Game) loop() {
 		g.calcScreenSize()
 		g.clear()
 		g.drawBorders()
+		g.drawTerrain()
 		g.player.draw()
 		g.drawHud()
 
