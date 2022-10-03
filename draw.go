@@ -44,23 +44,6 @@ func (g *Game) screenSize() (width, height int) {
 	return g.screen.Size()
 }
 
-func (g *Game) drawBorders() {
-	for x := 1; x < g.width-1; x++ {
-		g.PutChar(x, 0, tcell.RuneHLine)
-		g.PutChar(x, g.height-1, tcell.RuneHLine)
-	}
-
-	for y := 1; y < g.height-1; y++ {
-		g.PutChar(0, y, tcell.RuneVLine)
-		g.PutChar(g.width-1, y, tcell.RuneVLine)
-	}
-
-	g.PutChar(0, 0, tcell.RuneULCorner)
-	g.PutChar(0, g.height-1, tcell.RuneLLCorner)
-	g.PutChar(g.width-1, 0, tcell.RuneURCorner)
-	g.PutChar(g.width-1, g.height-1, tcell.RuneLRCorner)
-}
-
 func (g *Game) drawText(x, y int, text string) {
 	for i, r := range []rune(text) {
 		g.PutChar(x+i, y, r)

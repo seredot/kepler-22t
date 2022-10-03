@@ -69,8 +69,8 @@ func (g *Game) calcScreenSize() {
 	g.width = w
 	g.height = h
 
-	g.left = 1
-	g.right = g.width - 2
+	g.left = 0
+	g.right = g.width - 1
 	g.top = 1
 	g.bottom = g.height - 2
 }
@@ -124,7 +124,6 @@ func (g *Game) loop() {
 		g.spawnEnemy()
 		g.calcScreenSize()
 		g.clear()
-		g.drawBorders()
 		g.drawTerrain()
 		g.moveEnemies()
 		g.drawEnemies()

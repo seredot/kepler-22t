@@ -5,8 +5,8 @@ import "github.com/seredot/trash/style"
 func (g *Game) drawTerrain() {
 
 	g.ResetStyle()
-	for x := g.left; x <= g.right; x++ {
-		for y := g.top; y <= g.bottom; y++ {
+	for x := 0; x < g.width; x++ {
+		for y := 0; y < g.height; y++ {
 			zoom := 8.0
 			ambient := 10.0
 			strength := 12.0

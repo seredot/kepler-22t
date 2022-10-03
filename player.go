@@ -50,20 +50,20 @@ func (p *Player) direction(dx, dy float64) {
 func (p *Player) move() {
 	p.Object.move()
 
-	if p.x < 1 {
-		p.x = 1
+	if p.x < float64(p.game.left) {
+		p.x = float64(p.game.left)
 		p.speed = 0
 	}
-	if p.x > float64(p.game.width)-2 {
-		p.x = float64(p.game.width) - 2
+	if p.x > float64(p.game.right) {
+		p.x = float64(p.game.right)
 		p.speed = 0
 	}
-	if p.y < 1 {
-		p.y = 1
+	if p.y < float64(p.game.top) {
+		p.y = float64(p.game.top)
 		p.speed = 0
 	}
-	if p.y > float64(p.game.height)-2 {
-		p.y = float64(p.game.height) - 2
+	if p.y > float64(p.game.bottom) {
+		p.y = float64(p.game.bottom)
 		p.speed = 0
 	}
 }

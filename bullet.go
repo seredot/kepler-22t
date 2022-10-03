@@ -36,20 +36,20 @@ func (b *Bullet) hit() {
 func (b *Bullet) move() {
 	b.Object.move()
 
-	if b.x < 1 {
-		b.x = 0
+	if b.x < float64(b.game.left) {
+		b.x = float64(b.game.left)
 		b.hit()
 	}
-	if b.x > float64(b.game.width)-2 {
-		b.x = float64(b.game.width) - 1
+	if b.x > float64(b.game.right)+0.5 {
+		b.x = float64(b.game.right)
 		b.hit()
 	}
-	if b.y < 1 {
+	if b.y < float64(b.game.top) {
 		b.y = 0
 		b.hit()
 	}
-	if b.y > float64(b.game.height)-2 {
-		b.y = float64(b.game.height) - 1
+	if b.y > float64(b.game.bottom)+0.5 {
+		b.y = float64(b.game.bottom + 1)
 		b.hit()
 	}
 }
