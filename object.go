@@ -51,6 +51,6 @@ func (o *Object) draw() {
 	o.move()
 	o.game.ResetStyle()
 	o.game.Foreground(o.color)
-	o.game.PutChar(o.scrX(), o.scrY(), o.sprite)
+	o.game.PatchChar(o.scrX(), o.scrY(), o.sprite)
 	o.game.ResetStyle()
 }

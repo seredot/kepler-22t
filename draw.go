@@ -23,6 +23,13 @@ func (g *Game) PutChar(x, y int, r rune) {
 	g.screen.SetContent(x, y, r, nil, tcell.Style(g.style))
 }
 
+func (g *Game) PatchChar(x, y int, r rune) {
+	_, _, bgStyle, _ := g.screen.GetContent(x, y)
+	fgColor, _, _ := tcell.Style(g.style).Decompose()
+	mergedStyle := bgStyle.Foreground(fgColor)
+	g.screen.SetContent(x, y, r, nil, tcell.Style(mergedStyle))
+}
+
 func (g *Game) clear() {
 	g.screen.SetStyle(tcell.Style(g.defStyle))
 	g.screen.Clear()
@@ -65,5 +72,5 @@ func (g *Game) drawHud() {
 	// Stats
 	g.drawText(2, g.height-1, fmt.Sprintf(" Fr %d | FPS %0.2f ", g.frame, 1000.0/float64(g.deltaT)))
 	// Debug log
-	g.drawText(22, g.height-1, fmt.Sprintf(" Color %d %x ", g.screen.Colors(), style.Hsl2Rgb(242, 26, 43)))
+	//g.drawText(22, g.height-1, fmt.Sprintf(" Color %d %x ", g.screen.Colors(), style.Hsl2Rgb(242, 26, 43)))
 }
