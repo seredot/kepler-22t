@@ -2,7 +2,10 @@ module github.com/seredot/trash
 
 go 1.19
 
-require github.com/gdamore/tcell/v2 v2.5.3
+require (
+	github.com/gdamore/tcell/v2 v2.5.3
+	github.com/ojrac/opensimplex-go v1.0.2
+)
 
 require (
 	github.com/gdamore/encoding v1.0.0 // indirect

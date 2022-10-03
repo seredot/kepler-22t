@@ -9,6 +9,7 @@ const (
 	ColorReset      = Color(tcell.ColorReset)
 	ColorPlayer     = Color(tcell.ColorBlue)
 	ColorBullet     = Color(tcell.ColorYellow)
+	ColorEnemy      = Color(tcell.ColorRed)
 	ColorBackground = Color(tcell.ColorBlack)
 	ColorForeground = Color(tcell.ColorWhite)
 )

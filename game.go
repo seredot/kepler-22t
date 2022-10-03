@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/gdamore/tcell/v2"
+	opensimplex "github.com/ojrac/opensimplex-go"
 	"github.com/seredot/trash/style"
 )
 
@@ -18,9 +19,13 @@ type Game struct {
 	right    int // right most playable area
 	top      int // top most playable area
 	bottom   int //  bottom most playable area
-	player   *Player
-	frame    int
-	deltaT   int64
+
+	frame  int
+	deltaT int64
+	noise  opensimplex.Noise
+
+	player  *Player
+	enemies []*Enemy
 }
 
 func (g *Game) init() {
@@ -40,6 +45,10 @@ func (g *Game) init() {
 
 	// Player initials
 	g.player = NewPlayer(g, 10, 10)
+	g.enemies = []*Enemy{}
+
+	// Random noise generator
+	g.noise = opensimplex.NewNormalized(110783)
 }
 
 func (g *Game) calcScreenSize() {
@@ -63,6 +72,18 @@ func (g *Game) calcScreenSize() {
 	g.bottom = g.height - 2
 }
 
+func (g *Game) spawnEnemy() {
+	if g.frame%100 == 0 {
+		g.enemies = append(g.enemies, NewEnemy(g))
+	}
+}
+
+func (g *Game) drawEnemies() {
+	for _, e := range g.enemies {
+		e.draw()
+	}
+}
+
 func (g *Game) loop() {
 	lastFrameT := time.Now().UnixMilli()
 	g.deltaT = 10
@@ -72,10 +93,12 @@ func (g *Game) loop() {
 			return
 		}
 
+		g.spawnEnemy()
 		g.calcScreenSize()
 		g.clear()
 		g.drawBorders()
 		g.drawTerrain()
+		g.drawEnemies()
 		g.player.draw()
 		g.drawHud()
 
