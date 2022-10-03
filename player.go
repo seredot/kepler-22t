@@ -47,12 +47,29 @@ func (p *Player) direction(dx, dy float64) {
 	}
 }
 
+func (p *Player) move() {
+	p.Object.move()
+
+	if p.x < 1 {
+		p.x = 1
+		p.speed = 0
+	}
+	if p.x > float64(p.game.width)-2 {
+		p.x = float64(p.game.width) - 2
+		p.speed = 0
+	}
+	if p.y < 1 {
+		p.y = 1
+		p.speed = 0
+	}
+	if p.y > float64(p.game.height)-2 {
+		p.y = float64(p.game.height) - 2
+		p.speed = 0
+	}
+}
+
 func (p *Player) draw() {
 	p.Object.draw()
-
-	for _, b := range p.bullets {
-		b.draw()
-	}
 }
 
 func (p *Player) fire() {

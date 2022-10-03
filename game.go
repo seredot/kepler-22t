@@ -81,9 +81,34 @@ func (g *Game) spawnEnemy() {
 	}
 }
 
+func (g *Game) moveEnemies() {
+	for _, e := range g.enemies {
+		e.move()
+	}
+}
+
 func (g *Game) drawEnemies() {
 	for _, e := range g.enemies {
 		e.draw()
+	}
+}
+
+func (g *Game) moveBullets() {
+	nextBullets := make([]*Bullet, 0, len(g.player.bullets))
+
+	for _, b := range g.player.bullets {
+		b.move()
+		if !b.removed {
+			nextBullets = append(nextBullets, b)
+		}
+	}
+
+	g.player.bullets = nextBullets
+}
+
+func (g *Game) drawBullets() {
+	for _, b := range g.player.bullets {
+		b.draw()
 	}
 }
 
@@ -101,8 +126,12 @@ func (g *Game) loop() {
 		g.clear()
 		g.drawBorders()
 		g.drawTerrain()
+		g.moveEnemies()
 		g.drawEnemies()
+		g.player.move()
 		g.player.draw()
+		g.moveBullets()
+		g.drawBullets()
 		g.drawAimPointer()
 		g.drawHud()
 

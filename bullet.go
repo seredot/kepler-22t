@@ -1,6 +1,8 @@
 package main
 
 import (
+	"time"
+
 	"github.com/seredot/trash/style"
 )
 
@@ -23,4 +25,31 @@ func NewBullet(game *Game, x, y, dx, dy, speed float64) *Bullet {
 	}
 
 	return b
+}
+
+func (b *Bullet) hit() {
+	b.Object.speed = 0
+	b.Object.sprite = '✧'
+	b.Object.removeIn(time.Millisecond * 150)
+}
+
+func (b *Bullet) move() {
+	b.Object.move()
+
+	if b.x < 1 {
+		b.x = 0
+		b.hit()
+	}
+	if b.x > float64(b.game.width)-2 {
+		b.x = float64(b.game.width) - 1
+		b.hit()
+	}
+	if b.y < 1 {
+		b.y = 0
+		b.hit()
+	}
+	if b.y > float64(b.game.height)-2 {
+		b.y = float64(b.game.height) - 1
+		b.hit()
+	}
 }
