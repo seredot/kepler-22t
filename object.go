@@ -3,7 +3,7 @@ package main
 import (
 	"math"
 
-	"github.com/gdamore/tcell/v2"
+	"github.com/seredot/trash/style"
 )
 
 type Object struct {
@@ -13,7 +13,7 @@ type Object struct {
 	speed  float64
 	drag   float64
 	sprite rune
-	color  tcell.Color
+	color  style.Color
 }
 
 func (o *Object) move() {
@@ -49,5 +49,8 @@ func (o *Object) scrY() int {
 
 func (o *Object) draw() {
 	o.move()
-	o.game.screen.SetContent(o.scrX(), o.scrY(), o.sprite, nil, o.game.defStyle.Foreground(o.color))
+	o.game.ResetStyle()
+	o.game.Foreground(o.color)
+	o.game.PutChar(o.scrX(), o.scrY(), o.sprite)
+	o.game.ResetStyle()
 }

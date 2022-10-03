@@ -1,6 +1,8 @@
 package main
 
-import "github.com/gdamore/tcell/v2"
+import (
+	"github.com/seredot/trash/style"
+)
 
 type Bullet struct {
 	Object
@@ -16,7 +18,7 @@ func NewBullet(game *Game, x, y, dx, dy, speed float64) *Bullet {
 			dy:     dy,
 			speed:  speed,
 			sprite: '•',
-			color:  tcell.ColorYellow,
+			color:  style.ColorBullet,
 		},
 	}
 

@@ -1,6 +1,8 @@
 package main
 
-import "github.com/gdamore/tcell/v2"
+import (
+	"github.com/seredot/trash/style"
+)
 
 type Player struct {
 	Object
@@ -17,7 +19,7 @@ func NewPlayer(game *Game, x, y int) *Player {
 			dy:     0,
 			drag:   20,
 			sprite: 'X',
-			color:  tcell.ColorBlue,
+			color:  style.ColorPlayer,
 		},
 		bullets: []*Bullet{},
 	}
