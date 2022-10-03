@@ -31,12 +31,13 @@ func (g *Game) PatchChar(x, y int, r rune) {
 }
 
 func (g *Game) clear() {
+	// Since all the screen is redrawn every frame,
+	// it is not necessary to clear the screen.
 	g.screen.SetStyle(tcell.Style(g.defStyle))
-	g.screen.Clear()
 }
 
 func (g *Game) sync() {
-	g.screen.Sync()
+	g.screen.Show()
 }
 
 func (g *Game) screenSize() (width, height int) {

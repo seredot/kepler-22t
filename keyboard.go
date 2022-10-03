@@ -15,7 +15,7 @@ func (g *Game) processKeyboard() bool {
 			keyRune := ev.Rune()
 
 			if key == tcell.KeyEscape || key == tcell.KeyCtrlC {
-				g.screen.Clear()
+				g.clear()
 				g.screen.Fini()
 				return false
 			} else if key == tcell.KeyLeft {

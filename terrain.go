@@ -8,7 +8,7 @@ func (g *Game) drawTerrain() {
 		for y := g.top; y <= g.bottom; y++ {
 			g.Background(style.Color(style.Hsl2Rgb(242, 26, 43)))
 			g.Foreground(style.Color(style.Hsl2Rgb(242, 26, 43)))
-			g.PutChar(x, y, '@')
+			g.PutChar(x, y, ' ')
 		}
 	}
 	g.ResetStyle()
