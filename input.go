@@ -36,13 +36,13 @@ func (g *Game) processInput() bool {
 			// Only process button events, not wheel events
 			button &= tcell.ButtonMask(0xff)
 
-			if button == tcell.ButtonNone {
-				g.mouseX = x
-				g.mouseY = y
-			}
+			//if button == tcell.ButtonNone {
+			g.mouseX = x
+			g.mouseY = y
+			//}
 			switch ev.Buttons() {
-			case tcell.ButtonNone:
-
+			case tcell.ButtonPrimary:
+				g.player.fire()
 			}
 		}
 	}

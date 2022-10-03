@@ -1,6 +1,8 @@
 package main
 
 import (
+	"math"
+
 	"github.com/seredot/trash/style"
 )
 
@@ -54,5 +56,10 @@ func (p *Player) draw() {
 }
 
 func (p *Player) fire() {
-	p.bullets = append(p.bullets, NewBullet(p.game, p.x, p.y, p.dx, p.dy, 50))
+	dx := float64(p.game.mouseX) - p.x
+	dy := float64(p.game.mouseY) - p.y
+	mag := math.Sqrt(dx*dx + dy*dy)
+	dx /= mag
+	dy /= mag
+	p.bullets = append(p.bullets, NewBullet(p.game, p.x, p.y, dx, dy, 30))
 }
