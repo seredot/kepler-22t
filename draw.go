@@ -75,3 +75,23 @@ func (g *Game) drawHud() {
 	// Debug log
 	//g.drawText(22, g.height-1, fmt.Sprintf(" Color %d %x ", g.screen.Colors(), style.Hsl2Rgb(242, 26, 43)))
 }
+
+func (g *Game) isInScreen(x, y int) bool {
+	if x >= g.left && x <= g.right && y >= g.top && y <= g.bottom {
+		return true
+	}
+
+	return false
+}
+
+func (g *Game) drawAimPointer() {
+	if !g.isInScreen(g.mouseX, g.mouseY) {
+		return
+	}
+
+	g.ResetStyle()
+	g.Foreground(style.ColorPointer)
+	g.PatchChar(g.mouseX-1, g.mouseY, '❯')
+	g.PatchChar(g.mouseX+1, g.mouseY, '❮')
+	g.ResetStyle()
+}

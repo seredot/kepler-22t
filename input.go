@@ -4,7 +4,7 @@ import (
 	"github.com/gdamore/tcell/v2"
 )
 
-func (g *Game) processKeyboard() bool {
+func (g *Game) processInput() bool {
 	for g.screen.HasPendingEvent() {
 		ev := g.screen.PollEvent()
 		switch ev := ev.(type) {
@@ -18,16 +18,31 @@ func (g *Game) processKeyboard() bool {
 				g.clear()
 				g.screen.Fini()
 				return false
-			} else if key == tcell.KeyLeft {
+			} else if key == tcell.KeyLeft || keyRune == 'a' {
 				g.player.direction(-1, 0)
-			} else if key == tcell.KeyRight {
+			} else if key == tcell.KeyRight || keyRune == 'd' {
 				g.player.direction(1, 0)
-			} else if key == tcell.KeyUp {
+			} else if key == tcell.KeyUp || keyRune == 'w' {
 				g.player.direction(0, -1)
-			} else if key == tcell.KeyDown {
+			} else if key == tcell.KeyDown || keyRune == 's' {
 				g.player.direction(0, 1)
 			} else if keyRune == ' ' {
 				g.player.fire()
+			}
+		case *tcell.EventMouse:
+			x, y := ev.Position()
+			button := ev.Buttons()
+
+			// Only process button events, not wheel events
+			button &= tcell.ButtonMask(0xff)
+
+			if button == tcell.ButtonNone {
+				g.mouseX = x
+				g.mouseY = y
+			}
+			switch ev.Buttons() {
+			case tcell.ButtonNone:
+
 			}
 		}
 	}

@@ -19,6 +19,8 @@ type Game struct {
 	right    int // right most playable area
 	top      int // top most playable area
 	bottom   int //  bottom most playable area
+	mouseX   int
+	mouseY   int
 
 	frame  int
 	deltaT int64
@@ -40,6 +42,7 @@ func (g *Game) init() {
 		log.Fatalf("%+v", err)
 	}
 	g.screen = s
+	s.EnableMouse()
 	g.calcScreenSize()
 	g.clear()
 
@@ -89,7 +92,7 @@ func (g *Game) loop() {
 	g.deltaT = 10
 
 	for {
-		if !g.processKeyboard() {
+		if !g.processInput() {
 			return
 		}
 
@@ -100,6 +103,7 @@ func (g *Game) loop() {
 		g.drawTerrain()
 		g.drawEnemies()
 		g.player.draw()
+		g.drawAimPointer()
 		g.drawHud()
 
 		g.frame++

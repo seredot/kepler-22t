@@ -8,6 +8,7 @@ type Style tcell.Style
 const (
 	ColorReset      = Color(tcell.ColorReset)
 	ColorPlayer     = Color(tcell.ColorBlue)
+	ColorPointer    = Color(tcell.ColorGreen)
 	ColorBullet     = Color(tcell.ColorYellow)
 	ColorEnemy      = Color(tcell.ColorRed)
 	ColorBackground = Color(tcell.ColorBlack)
