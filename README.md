@@ -1,6 +1,12 @@
-# Tr@sh
+# Kepler-22t
 
-Shooter game running on terminal.
+Year 2143, in search of new habitable planets for the humanity, a pod from an
+outer space expedition mission ship crash lands on Planet Kepler-22t. While the
+rest of the crew drops her supplies from the low planet orbit, the sole survivor
+of the crash fights for her life against the hostile residents of this foreign
+world.
+
+A shooter / survival game running on terminal.
 
 ## Installation
 
@@ -15,4 +21,4 @@ input restrictions press arrow keys repeatedly to be able to move while firing.
 
 ## Notes
 
-- Tested on MacOS terminal only.
+- Tested on MacOS iterm2 only.

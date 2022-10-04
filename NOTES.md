@@ -8,13 +8,13 @@
 - Semi automatic gun.
 - Machine gun.
 - Gatling gun.
-- Hand granade.
+- Hand grenade.
 - Rail gun.
 - Flame thrower.
 - Plasma gun.
 - Fireblast.
 - Freezer.
-- Tripple damage.
+- Triple damage.
 
 ### Other
 
