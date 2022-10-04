@@ -45,7 +45,7 @@ func (b *Bullet) move() {
 		b.hit()
 	}
 	if b.y < float64(b.game.top) {
-		b.y = 0
+		b.y = float64(b.game.top)
 		b.hit()
 	}
 	if b.y > float64(b.game.bottom)+0.5 {

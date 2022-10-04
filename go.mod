@@ -5,6 +5,7 @@ go 1.19
 require (
 	github.com/gdamore/tcell/v2 v2.5.3
 	github.com/ojrac/opensimplex-go v1.0.2
+	gonum.org/v1/gonum v0.12.0
 )
 
 require (

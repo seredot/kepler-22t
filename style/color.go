@@ -6,8 +6,12 @@ import (
 	"github.com/gdamore/tcell/v2"
 )
 
+func ColorRGB(r, g, b uint64) Color {
+	return Color(uint64(tcell.ColorIsRGB) | uint64(tcell.ColorValid) | r<<16 | g<<8 | b)
+}
+
 // Function is based on https://github.com/hisamafahri/coco/blob/main/hsl.go
-func Hsl2Rgb(h float64, s float64, l float64) uint64 {
+func Hsl2Rgb(h float64, s float64, l float64) Color {
 	h = h / 360
 	s = s / 100
 	l = l / 100
@@ -23,7 +27,7 @@ func Hsl2Rgb(h float64, s float64, l float64) uint64 {
 		result[1] = uint64(math.Round(val))
 		result[2] = uint64(math.Round(val))
 
-		return result[0]<<16 | result[1]<<8 | result[2]
+		return ColorRGB(result[0], result[1], result[2])
 	}
 
 	if l < 0.5 {
@@ -63,5 +67,5 @@ func Hsl2Rgb(h float64, s float64, l float64) uint64 {
 	result[1] = uint64(math.Round(rgb[1]))
 	result[2] = uint64(math.Round(rgb[2]))
 
-	return uint64(tcell.ColorIsRGB) | uint64(tcell.ColorValid) | result[0]<<16 | result[1]<<8 | result[2]
+	return ColorRGB(result[0], result[1], result[2])
 }
