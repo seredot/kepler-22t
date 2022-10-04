@@ -8,8 +8,8 @@ type Enemy struct {
 }
 
 func NewEnemy(game *Game) *Enemy {
-	x := float64(game.left) + float64(game.width)*game.noise.Eval2(0, float64(game.frame))
-	y := float64(game.top) + float64(game.height)*game.noise.Eval2(float64(game.frame), 0)
+	x := float64(game.left) + float64(game.right-game.left)*game.noise.Eval2(0, float64(game.frame))
+	y := float64(game.top) + float64(game.bottom-game.top)*game.noise.Eval2(float64(game.frame), 0)
 
 	e := &Enemy{
 		Object: Object{

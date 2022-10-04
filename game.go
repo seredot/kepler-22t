@@ -131,6 +131,7 @@ func (g *Game) loop() {
 		g.player.draw()
 		g.moveBullets()
 		g.drawBullets()
+		hitBullets(g.player.bullets, g.enemies)
 		g.drawAimPointer()
 		g.drawHud()
 

@@ -8,6 +8,7 @@ import (
 
 type Bullet struct {
 	Object
+	damage float64
 }
 
 func NewBullet(game *Game, x, y, dx, dy, speed float64) *Bullet {
@@ -22,6 +23,7 @@ func NewBullet(game *Game, x, y, dx, dy, speed float64) *Bullet {
 			sprite: '•',
 			color:  style.ColorBullet,
 		},
+		damage: 40,
 	}
 
 	return b
