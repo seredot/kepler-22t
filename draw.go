@@ -20,11 +20,27 @@ func (g *Game) Foreground(c style.Color) {
 	g.style = style.Style(tcell.Style(g.style).Foreground(tcell.Color(c)))
 }
 
+func (g *Game) outOfScreen(x, y int) bool {
+	if x < 0 || x >= g.width || y < 0 || y >= g.height {
+		return true
+	}
+
+	return false
+}
+
 func (g *Game) PutChar(x, y int, r rune) {
+	if g.outOfScreen(x, y) {
+		return
+	}
+
 	g.screen.SetContent(x, y, r, nil, tcell.Style(g.style))
 }
 
 func (g *Game) PatchChar(x, y int, r rune) {
+	if g.outOfScreen(x, y) {
+		return
+	}
+
 	_, _, bgStyle, _ := g.screen.GetContent(x, y)
 	fgColor, _, _ := tcell.Style(g.style).Decompose()
 	mergedStyle := bgStyle.Foreground(fgColor)
