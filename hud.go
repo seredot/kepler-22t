@@ -15,9 +15,9 @@ func (g *Game) drawHud() {
 	gs := []float64{44, 100, 86, 43, 30}
 	bs := []float64{55, 100, 206, 137, 97}
 	xs := []float64{0, w * 0.2, w * 0.5, w * 0.8, w}
-	pr := interp.PiecewiseLinear{}
-	pg := interp.PiecewiseLinear{}
-	pb := interp.PiecewiseLinear{}
+	pr := interp.ClampedCubic{}
+	pg := interp.ClampedCubic{}
+	pb := interp.ClampedCubic{}
 	pr.Fit(xs, rs)
 	pg.Fit(xs, gs)
 	pb.Fit(xs, bs)
