@@ -2,35 +2,51 @@ package main
 
 import (
 	"log"
+	"math"
 	"time"
 
 	"github.com/gdamore/tcell/v2"
 	opensimplex "github.com/ojrac/opensimplex-go"
-	"github.com/seredot/trash/style"
+	"github.com/seredot/kepler-22t/style"
 )
 
 type Game struct {
+	// Canvas
+	canvas   Canvas
 	screen   tcell.Screen
 	defStyle style.Style
 	style    style.Style
-	width    int // screen width
-	height   int // screen height
-	left     int // left most playable area
-	right    int // right most playable area
-	top      int // top most playable area
-	bottom   int //  bottom most playable area
-	mouseX   int
-	mouseY   int
 
+	coords Coords
+	width  int // screen width
+	height int // screen height
+	left   int // left most playable area
+	right  int // right most playable area
+	top    int // top most playable area
+	bottom int //  bottom most playable area
+	mouseX int
+	mouseY int
+
+	// Timing
+	timing Timing
 	frame  int
 	deltaT int64
-	noise  opensimplex.Noise
 
+	// Objects
 	player  *Player
 	enemies []*Enemy
+
+	// Misc
+	noise opensimplex.Noise
 }
 
-func (g *Game) init() {
+func NewGame() *Game {
+	g := &Game{}
+
+	g.timing = g
+	g.coords = g
+	g.canvas = g
+
 	g.defStyle = style.DefaultStyle()
 
 	// Initialize screen
@@ -52,6 +68,8 @@ func (g *Game) init() {
 
 	// Random noise generator
 	g.noise = opensimplex.NewNormalized(110783)
+
+	return g
 }
 
 func (g *Game) calcScreenSize() {
@@ -75,6 +93,15 @@ func (g *Game) calcScreenSize() {
 	g.bottom = g.height - 2
 }
 
+func (g *Game) fire() {
+	dx := float64(g.mouseX) - g.player.x
+	dy := float64(g.mouseY) - g.player.y
+	mag := math.Sqrt(dx*dx + dy*dy)
+	dx /= mag
+	dy /= mag
+	g.player.bullets = append(g.player.bullets, NewBullet(g.player.x, g.player.y, dx, dy, 30))
+}
+
 func (g *Game) spawnEnemy() {
 	if g.frame%100 == 0 {
 		g.enemies = append(g.enemies, NewEnemy(g))
@@ -83,13 +110,13 @@ func (g *Game) spawnEnemy() {
 
 func (g *Game) moveEnemies() {
 	for _, e := range g.enemies {
-		e.move()
+		e.move(g.timing)
 	}
 }
 
 func (g *Game) drawEnemies() {
 	for _, e := range g.enemies {
-		e.draw()
+		e.draw(g.canvas)
 	}
 }
 
@@ -97,7 +124,7 @@ func (g *Game) moveBullets() {
 	nextBullets := make([]*Bullet, 0, len(g.player.bullets))
 
 	for _, b := range g.player.bullets {
-		b.move()
+		b.move(g.timing, g.coords)
 		if !b.removed {
 			nextBullets = append(nextBullets, b)
 		}
@@ -108,11 +135,11 @@ func (g *Game) moveBullets() {
 
 func (g *Game) drawBullets() {
 	for _, b := range g.player.bullets {
-		b.draw()
+		b.draw(g.canvas)
 	}
 }
 
-func (g *Game) loop() {
+func (g *Game) Loop() {
 	lastFrameT := time.Now().UnixMilli()
 	g.deltaT = 10
 
@@ -127,8 +154,8 @@ func (g *Game) loop() {
 		g.drawTerrain()
 		g.moveEnemies()
 		g.drawEnemies()
-		g.player.move()
-		g.player.draw()
+		g.player.move(g.timing, g.coords)
+		g.player.draw(g.canvas)
 		g.moveBullets()
 		g.drawBullets()
 		hitBullets(g.player.bullets, g.enemies)

@@ -3,7 +3,7 @@ package main
 import (
 	"time"
 
-	"github.com/seredot/trash/style"
+	"github.com/seredot/kepler-22t/style"
 )
 
 type Bullet struct {
@@ -11,10 +11,9 @@ type Bullet struct {
 	damage float64
 }
 
-func NewBullet(game *Game, x, y, dx, dy, speed float64) *Bullet {
+func NewBullet(x, y, dx, dy, speed float64) *Bullet {
 	b := &Bullet{
 		Object: Object{
-			game:   game,
 			x:      float64(x),
 			y:      float64(y),
 			dx:     dx,
@@ -35,23 +34,23 @@ func (b *Bullet) hit() {
 	b.Object.removeIn(time.Millisecond * 150)
 }
 
-func (b *Bullet) move() {
-	b.Object.move()
+func (b *Bullet) move(t Timing, c Coords) {
+	b.Object.move(t)
 
-	if b.x < float64(b.game.left) {
-		b.x = float64(b.game.left)
+	if b.x < float64(c.Left()) {
+		b.x = float64(c.Left())
 		b.hit()
 	}
-	if b.x > float64(b.game.right)+0.5 {
-		b.x = float64(b.game.right)
+	if b.x > float64(c.Right())+0.5 {
+		b.x = float64(c.Right())
 		b.hit()
 	}
-	if b.y < float64(b.game.top) {
-		b.y = float64(b.game.top)
+	if b.y < float64(c.Top()) {
+		b.y = float64(c.Top())
 		b.hit()
 	}
-	if b.y > float64(b.game.bottom)+0.5 {
-		b.y = float64(b.game.bottom + 1)
+	if b.y > float64(c.Bottom())+0.5 {
+		b.y = float64(c.Bottom() + 1)
 		b.hit()
 	}
 }

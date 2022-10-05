@@ -1,6 +1,6 @@
 package main
 
-import "github.com/seredot/trash/style"
+import "github.com/seredot/kepler-22t/style"
 
 type Enemy struct {
 	Object
@@ -13,7 +13,6 @@ func NewEnemy(game *Game) *Enemy {
 
 	e := &Enemy{
 		Object: Object{
-			game:   game,
 			x:      x,
 			y:      y,
 			sprite: '✹',

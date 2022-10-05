@@ -1,6 +1,6 @@
 package main
 
-import "github.com/seredot/trash/style"
+import "github.com/seredot/kepler-22t/style"
 
 func (g *Game) drawTerrain() {
 

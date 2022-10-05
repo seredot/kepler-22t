@@ -1,4 +1,4 @@
-module github.com/seredot/trash
+module github.com/seredot/kepler-22t
 
 go 1.19
 

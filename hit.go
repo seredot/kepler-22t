@@ -3,7 +3,7 @@ package main
 import (
 	"math"
 
-	"github.com/seredot/trash/style"
+	"github.com/seredot/kepler-22t/style"
 )
 
 const HitRange = 0.75

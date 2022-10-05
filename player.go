@@ -1,9 +1,7 @@
 package main
 
 import (
-	"math"
-
-	"github.com/seredot/trash/style"
+	"github.com/seredot/kepler-22t/style"
 )
 
 type Player struct {
@@ -14,7 +12,6 @@ type Player struct {
 func NewPlayer(game *Game, x, y int) *Player {
 	p := &Player{
 		Object: Object{
-			game:   game,
 			x:      float64(x) - 1,
 			y:      float64(y),
 			dx:     1,
@@ -47,36 +44,27 @@ func (p *Player) direction(dx, dy float64) {
 	}
 }
 
-func (p *Player) move() {
-	p.Object.move()
+func (p *Player) move(t Timing, c Coords) {
+	p.Object.move(t)
 
-	if p.x < float64(p.game.left) {
-		p.x = float64(p.game.left)
+	if p.x < float64(c.Left()) {
+		p.x = float64(c.Left())
 		p.speed = 0
 	}
-	if p.x > float64(p.game.right) {
-		p.x = float64(p.game.right)
+	if p.x > float64(c.Right()) {
+		p.x = float64(c.Right())
 		p.speed = 0
 	}
-	if p.y < float64(p.game.top) {
-		p.y = float64(p.game.top)
+	if p.y < float64(c.Top()) {
+		p.y = float64(c.Top())
 		p.speed = 0
 	}
-	if p.y > float64(p.game.bottom) {
-		p.y = float64(p.game.bottom)
+	if p.y > float64(c.Bottom()) {
+		p.y = float64(c.Bottom())
 		p.speed = 0
 	}
 }
 
-func (p *Player) draw() {
-	p.Object.draw()
-}
-
-func (p *Player) fire() {
-	dx := float64(p.game.mouseX) - p.x
-	dy := float64(p.game.mouseY) - p.y
-	mag := math.Sqrt(dx*dx + dy*dy)
-	dx /= mag
-	dy /= mag
-	p.bullets = append(p.bullets, NewBullet(p.game, p.x, p.y, dx, dy, 30))
+func (p *Player) draw(c Canvas) {
+	p.Object.draw(c)
 }

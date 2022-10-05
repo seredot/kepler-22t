@@ -1,7 +1,6 @@
 package main
 
 func main() {
-	g := Game{}
-	g.init()
-	g.loop()
+	g := NewGame()
+	g.Loop()
 }

@@ -27,7 +27,7 @@ func (g *Game) processInput() bool {
 			} else if key == tcell.KeyDown || keyRune == 's' {
 				g.player.direction(0, 1)
 			} else if keyRune == ' ' {
-				g.player.fire()
+				g.fire()
 			}
 		case *tcell.EventMouse:
 			x, y := ev.Position()
@@ -42,7 +42,7 @@ func (g *Game) processInput() bool {
 			//}
 			switch ev.Buttons() {
 			case tcell.ButtonPrimary:
-				g.player.fire()
+				g.fire()
 			}
 		}
 	}
