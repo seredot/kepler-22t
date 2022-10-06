@@ -23,13 +23,14 @@ type Game struct {
 	left   int // left most playable area
 	right  int // right most playable area
 	top    int // top most playable area
-	bottom int //  bottom most playable area
+	bottom int // bottom most playable area
 	mouseX int
 	mouseY int
 
 	// Timing
 	timing Timing
 	frame  int
+	totalT time.Duration
 	deltaT time.Duration
 
 	// Objects
@@ -168,6 +169,7 @@ func (g *Game) Loop() {
 		// Calculate delta time between frames
 		now := time.Now()
 		g.deltaT = now.Sub(lastFrameT)
+		g.totalT = g.totalT + g.deltaT
 		lastFrameT = now
 		if g.deltaT > 100*time.Millisecond {
 			g.deltaT = 100 * time.Millisecond
