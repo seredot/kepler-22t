@@ -9,6 +9,8 @@ type Coords interface {
 	Bottom() int
 	MouseX() int
 	MouseY() int
+	PlayerX() float64
+	PlayerY() float64
 }
 
 func (g *Game) Width() int {
@@ -41,4 +43,12 @@ func (g *Game) MouseX() int {
 
 func (g *Game) MouseY() int {
 	return g.mouseY
+}
+
+func (g *Game) PlayerX() float64 {
+	return g.player.x
+}
+
+func (g *Game) PlayerY() float64 {
+	return g.player.y
 }

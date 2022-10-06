@@ -19,8 +19,8 @@
 ### Other
 
 - Gun/ammo display.
-- Enemy movement.
+- Alien movement.
 - Player health, damage, effect.
 - Health booster.
-- Enemy health, damage, effect.
+- Alien health, damage, effect.
 - Scrolling screen?

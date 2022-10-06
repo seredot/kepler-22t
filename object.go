@@ -24,9 +24,9 @@ func (o *Object) removeIn(t time.Duration) {
 }
 
 func (o *Object) move(t Timing) {
-	o.x += o.dx * t.DeltaT() / 1000.0 * o.speed
-	o.y += o.dy * t.DeltaT() / 1000.0 * o.speed
-	o.speed = math.Max(0, o.speed-t.DeltaT()/1000.0*o.drag)
+	o.x += o.dx * t.DeltaT().Seconds() * o.speed
+	o.y += o.dy * t.DeltaT().Seconds() * o.speed
+	o.speed = math.Max(0, o.speed-t.DeltaT().Seconds()*o.drag)
 }
 
 func (o *Object) scrX() int {

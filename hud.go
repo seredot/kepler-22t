@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/seredot/kepler-22t/style"
 	"gonum.org/v1/gonum/interp"
@@ -33,7 +34,7 @@ func (g *Game) drawHud() {
 	// Title
 	g.DrawTextTransparent(2, 0, " Kepler 22t ")
 	// Stats
-	g.DrawTextTransparent(2, g.height-1, fmt.Sprintf(" Fr %d | FPS %0.2f ", g.frame, 1000.0/float64(g.deltaT)))
+	g.DrawTextTransparent(2, g.height-1, fmt.Sprintf(" Fr %d | FPS %0.2f ", g.frame, float64(time.Second/g.deltaT)))
 	// Debug log
 	//g.drawText(22, g.height-1, fmt.Sprintf(" Color %d %x ", g.screen.Colors(), style.Hsl2Rgb(242, 26, 43)))
 }

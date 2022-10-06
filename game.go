@@ -2,12 +2,12 @@ package main
 
 import (
 	"log"
-	"math"
 	"time"
 
 	"github.com/gdamore/tcell/v2"
 	opensimplex "github.com/ojrac/opensimplex-go"
 	"github.com/seredot/kepler-22t/style"
+	"github.com/seredot/kepler-22t/vector"
 )
 
 type Game struct {
@@ -30,11 +30,11 @@ type Game struct {
 	// Timing
 	timing Timing
 	frame  int
-	deltaT int64
+	deltaT time.Duration
 
 	// Objects
 	player  *Player
-	enemies []*Enemy
+	aliens  []*Alien
 	bullets []*Bullet
 
 	// Misc
@@ -65,7 +65,7 @@ func NewGame() *Game {
 
 	// Player initials
 	g.player = NewPlayer(g, 10, 10)
-	g.enemies = []*Enemy{}
+	g.aliens = []*Alien{}
 	g.bullets = []*Bullet{}
 
 	// Random noise generator
@@ -98,26 +98,24 @@ func (g *Game) calcScreenSize() {
 func (g *Game) fire() {
 	dx := float64(g.mouseX) - g.player.x
 	dy := float64(g.mouseY) - g.player.y
-	mag := math.Sqrt(dx*dx + dy*dy)
-	dx /= mag
-	dy /= mag
+	dx, dy = vector.Norm(dx, dy)
 	g.bullets = append(g.bullets, NewBullet(g.player.x, g.player.y, dx, dy, 30))
 }
 
-func (g *Game) spawnEnemy() {
+func (g *Game) spawnAlien() {
 	if g.frame%100 == 0 {
-		g.enemies = append(g.enemies, NewEnemy(g))
+		g.aliens = append(g.aliens, NewAlien(g))
 	}
 }
 
-func (g *Game) moveEnemies() {
-	for _, e := range g.enemies {
-		e.move(g.timing)
+func (g *Game) moveAliens() {
+	for _, e := range g.aliens {
+		e.move(g.timing, g.coords)
 	}
 }
 
-func (g *Game) drawEnemies() {
-	for _, e := range g.enemies {
+func (g *Game) drawAliens() {
+	for _, e := range g.aliens {
 		e.draw(g.canvas)
 	}
 }
@@ -142,25 +140,25 @@ func (g *Game) drawBullets() {
 }
 
 func (g *Game) Loop() {
-	lastFrameT := time.Now().UnixMilli()
-	g.deltaT = 10
+	lastFrameT := time.Now()
+	g.deltaT = 10 * time.Millisecond
 
 	for {
 		if !g.processInput() {
 			return
 		}
 
-		g.spawnEnemy()
+		g.spawnAlien()
 		g.calcScreenSize()
 		g.clear()
 		g.drawTerrain()
-		g.moveEnemies()
-		g.drawEnemies()
+		g.moveAliens()
+		g.drawAliens()
 		g.player.move(g.timing, g.coords)
 		g.player.draw(g.canvas)
 		g.moveBullets()
 		g.drawBullets()
-		hitBullets(g.bullets, g.enemies)
+		hitBullets(g.bullets, g.aliens)
 		g.drawAimPointer()
 		g.drawHud()
 
@@ -168,14 +166,14 @@ func (g *Game) Loop() {
 		g.sync()
 
 		// Calculate delta time between frames
-		now := time.Now().UnixMilli()
-		g.deltaT = now - lastFrameT
+		now := time.Now()
+		g.deltaT = now.Sub(lastFrameT)
 		lastFrameT = now
-		if g.deltaT > 100 {
-			g.deltaT = 100
+		if g.deltaT > 100*time.Millisecond {
+			g.deltaT = 100 * time.Millisecond
 		}
 
 		// Limit to 30 fps
-		time.Sleep(time.Duration(33-g.deltaT) * time.Millisecond)
+		time.Sleep((33 * time.Millisecond) - g.deltaT)
 	}
 }

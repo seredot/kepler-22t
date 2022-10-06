@@ -10,7 +10,7 @@ const (
 	ColorPlayer     = Color(tcell.ColorBlue)
 	ColorPointer    = Color(tcell.ColorGreen)
 	ColorBullet     = Color(tcell.ColorYellow)
-	ColorEnemy      = Color(tcell.ColorRed)
+	ColorAlien      = Color(tcell.ColorRed)
 	ColorBackground = Color(tcell.ColorBlack)
 	ColorForeground = Color(tcell.ColorWhite)
 )
