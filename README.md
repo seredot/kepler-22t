@@ -1,9 +1,9 @@
 # Kepler-22t
 
-Year 2143, in search of new habitable planets for the humanity, a pod from an
-outer space expedition mission ship crash lands on Planet Kepler-22t. While the
-rest of the crew drops her supplies from the low planet orbit, the sole survivor
-of the crash fights for her life against the hostile residents of this foreign
+Year 2143, in search of new habitable planets for humanity, a pod from an outer
+space expedition mission ship crash lands on Planet Kepler-22t. While the rest
+of the crew drops her supplies from the low planet orbit, the sole survivor of
+the crash fights for her life against the hostile residents of this foreign
 world.
 
 A shooter / survival game running on terminal.

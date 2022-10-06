@@ -6,7 +6,6 @@ import (
 
 type Player struct {
 	Object
-	bullets []*Bullet
 }
 
 func NewPlayer(game *Game, x, y int) *Player {
@@ -20,7 +19,6 @@ func NewPlayer(game *Game, x, y int) *Player {
 			sprite: 'X',
 			color:  style.ColorPlayer,
 		},
-		bullets: []*Bullet{},
 	}
 
 	p.direction(p.dx, p.dy)

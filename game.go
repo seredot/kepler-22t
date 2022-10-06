@@ -35,6 +35,7 @@ type Game struct {
 	// Objects
 	player  *Player
 	enemies []*Enemy
+	bullets []*Bullet
 
 	// Misc
 	noise opensimplex.Noise
@@ -65,6 +66,7 @@ func NewGame() *Game {
 	// Player initials
 	g.player = NewPlayer(g, 10, 10)
 	g.enemies = []*Enemy{}
+	g.bullets = []*Bullet{}
 
 	// Random noise generator
 	g.noise = opensimplex.NewNormalized(110783)
@@ -99,7 +101,7 @@ func (g *Game) fire() {
 	mag := math.Sqrt(dx*dx + dy*dy)
 	dx /= mag
 	dy /= mag
-	g.player.bullets = append(g.player.bullets, NewBullet(g.player.x, g.player.y, dx, dy, 30))
+	g.bullets = append(g.bullets, NewBullet(g.player.x, g.player.y, dx, dy, 30))
 }
 
 func (g *Game) spawnEnemy() {
@@ -121,20 +123,20 @@ func (g *Game) drawEnemies() {
 }
 
 func (g *Game) moveBullets() {
-	nextBullets := make([]*Bullet, 0, len(g.player.bullets))
+	nextBullets := make([]*Bullet, 0, len(g.bullets))
 
-	for _, b := range g.player.bullets {
+	for _, b := range g.bullets {
 		b.move(g.timing, g.coords)
 		if !b.removed {
 			nextBullets = append(nextBullets, b)
 		}
 	}
 
-	g.player.bullets = nextBullets
+	g.bullets = nextBullets
 }
 
 func (g *Game) drawBullets() {
-	for _, b := range g.player.bullets {
+	for _, b := range g.bullets {
 		b.draw(g.canvas)
 	}
 }
@@ -158,7 +160,7 @@ func (g *Game) Loop() {
 		g.player.draw(g.canvas)
 		g.moveBullets()
 		g.drawBullets()
-		hitBullets(g.player.bullets, g.enemies)
+		hitBullets(g.bullets, g.enemies)
 		g.drawAimPointer()
 		g.drawHud()
 
