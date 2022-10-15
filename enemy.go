@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/seredot/kepler-22t/style"
+	"github.com/seredot/kepler-22t/color"
 	"github.com/seredot/kepler-22t/vector"
 )
 
@@ -20,7 +20,7 @@ func NewAlien(game *Game) *Alien {
 			y:      y,
 			speed:  1,
 			sprite: '✹',
-			color:  style.ColorAlien,
+			color:  color.ColorAlien,
 		},
 		energy: 100.0,
 	}

@@ -4,7 +4,7 @@ import (
 	"math"
 	"time"
 
-	"github.com/seredot/kepler-22t/style"
+	"github.com/seredot/kepler-22t/color"
 )
 
 type Object struct {
@@ -13,7 +13,7 @@ type Object struct {
 	speed   float64
 	drag    float64
 	sprite  rune
-	color   style.Color
+	color   color.Color
 	removed bool
 }
 

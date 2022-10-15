@@ -6,7 +6,6 @@ import (
 
 	"github.com/gdamore/tcell/v2"
 	opensimplex "github.com/ojrac/opensimplex-go"
-	"github.com/seredot/kepler-22t/style"
 	"github.com/seredot/kepler-22t/vector"
 )
 
@@ -14,8 +13,8 @@ type Game struct {
 	// Canvas
 	canvas   Canvas
 	screen   tcell.Screen
-	defStyle style.Style
-	style    style.Style
+	defStyle tcell.Style
+	style    tcell.Style
 
 	coords Coords
 	width  int // screen width
@@ -49,7 +48,7 @@ func NewGame() *Game {
 	g.coords = g
 	g.canvas = g
 
-	g.defStyle = style.DefaultStyle()
+	g.defStyle = DefaultStyle
 
 	// Initialize screen
 	s, err := tcell.NewScreen()

@@ -1,8 +1,6 @@
 package main
 
-import (
-	"github.com/seredot/kepler-22t/style"
-)
+import "github.com/seredot/kepler-22t/color"
 
 type Player struct {
 	Object
@@ -17,7 +15,7 @@ func NewPlayer(game *Game, x, y int) *Player {
 			dy:     0,
 			drag:   20,
 			sprite: 'X',
-			color:  style.ColorPlayer,
+			color:  color.ColorPlayer,
 		},
 	}
 

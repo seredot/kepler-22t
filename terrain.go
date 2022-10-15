@@ -1,8 +1,6 @@
 package main
 
-import (
-	"github.com/seredot/kepler-22t/style"
-)
+import "github.com/seredot/kepler-22t/color"
 
 func (g *Game) drawTerrain() {
 	g.ResetStyle()
@@ -13,7 +11,7 @@ func (g *Game) drawTerrain() {
 			ambient := 10.0
 			strength := 12.0
 			luminosity := ambient + strength*g.noise.Eval3(float64(x)/zoom, float64(y)/zoom, float64(g.totalT.Seconds()))
-			g.Background(style.Color(style.Hsl2Rgb(242, 26, luminosity)))
+			g.Background(color.Hsl2Rgb(242, 26, luminosity))
 			g.PutChar(x, y, ' ')
 		}
 	}

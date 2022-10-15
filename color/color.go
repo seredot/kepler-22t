@@ -1,13 +1,33 @@
-package style
+package color
 
 import (
 	"math"
-
-	"github.com/gdamore/tcell/v2"
 )
 
-func ColorRGB(r, g, b uint64) Color {
-	return Color(uint64(tcell.ColorIsRGB) | uint64(tcell.ColorValid) | r<<16 | g<<8 | b)
+type Color struct {
+	R, G, B, A float64
+}
+
+var (
+	ColorPlayer     = Color{0, 0, 1, 1}
+	ColorPointer    = Color{0, 1, 0, 1}
+	ColorBullet     = Color{1, 1, 0, 1}
+	ColorAlien      = Color{1, 0, 0, 1}
+	ColorBackground = Color{0, 0, 0, 1}
+	ColorForeground = Color{1, 1, 1, 1}
+)
+
+func NewColorIntRGBA(r, g, b, a uint64) Color {
+	return Color{
+		R: float64(r) / 255.0,
+		G: float64(g) / 255.0,
+		B: float64(b) / 255.0,
+		A: float64(a) / 255.0,
+	}
+}
+
+func NewColorIntRGB(r, g, b uint64) Color {
+	return NewColorIntRGBA(r, g, b, 255)
 }
 
 // Function is based on https://github.com/hisamafahri/coco/blob/main/hsl.go
@@ -27,7 +47,7 @@ func Hsl2Rgb(h float64, s float64, l float64) Color {
 		result[1] = uint64(math.Round(val))
 		result[2] = uint64(math.Round(val))
 
-		return ColorRGB(result[0], result[1], result[2])
+		return NewColorIntRGB(result[0], result[1], result[2])
 	}
 
 	if l < 0.5 {
@@ -67,5 +87,5 @@ func Hsl2Rgb(h float64, s float64, l float64) Color {
 	result[1] = uint64(math.Round(rgb[1]))
 	result[2] = uint64(math.Round(rgb[2]))
 
-	return ColorRGB(result[0], result[1], result[2])
+	return NewColorIntRGB(result[0], result[1], result[2])
 }

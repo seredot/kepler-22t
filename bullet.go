@@ -3,7 +3,7 @@ package main
 import (
 	"time"
 
-	"github.com/seredot/kepler-22t/style"
+	"github.com/seredot/kepler-22t/color"
 )
 
 type Bullet struct {
@@ -20,7 +20,7 @@ func NewBullet(x, y, dx, dy, speed float64) *Bullet {
 			dy:     dy,
 			speed:  speed,
 			sprite: '•',
-			color:  style.ColorBullet,
+			color:  color.ColorBullet,
 		},
 		damage: 40,
 	}

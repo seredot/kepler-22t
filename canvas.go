@@ -2,20 +2,26 @@ package main
 
 import (
 	"github.com/gdamore/tcell/v2"
-	"github.com/seredot/kepler-22t/style"
+	"github.com/seredot/kepler-22t/color"
 )
 
 type Canvas interface {
 	Coords
 
 	ResetStyle()
-	Background(c style.Color)
-	Foreground(c style.Color)
+	Background(c color.Color)
+	Foreground(c color.Color)
 	OutOfScreen(x, y int) bool
 	PutChar(x, y int, r rune)
 	PatchChar(x, y int, r rune)
 	DrawTextTransparent(x, y int, text string)
 	DrawText(x, y int, text string)
+}
+
+var DefaultStyle = tcell.Style(tcell.StyleDefault.Background(tcell.ColorBlack).Foreground(tcell.ColorWhite).Blink(false))
+
+func ColorConv(c color.Color) tcell.Color {
+	return tcell.Color(uint64(tcell.ColorIsRGB) | uint64(tcell.ColorValid) | uint64(c.R*255.0)<<16 | uint64(c.G*255.0)<<8 | uint64(c.B*255.0))
 }
 
 func (g *Game) clear() {
@@ -36,12 +42,12 @@ func (g *Game) ResetStyle() {
 	g.style = g.defStyle
 }
 
-func (g *Game) Background(c style.Color) {
-	g.style = style.Style(tcell.Style(g.style).Background(tcell.Color(c)))
+func (g *Game) Background(c color.Color) {
+	g.style = g.style.Background(ColorConv(c))
 }
 
-func (g *Game) Foreground(c style.Color) {
-	g.style = style.Style(tcell.Style(g.style).Foreground(tcell.Color(c)))
+func (g *Game) Foreground(c color.Color) {
+	g.style = g.style.Foreground(ColorConv(c))
 }
 
 func (g *Game) OutOfScreen(x, y int) bool {

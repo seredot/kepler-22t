@@ -1,6 +1,6 @@
 package main
 
-import "github.com/seredot/kepler-22t/style"
+import "github.com/seredot/kepler-22t/color"
 
 func (g *Game) drawAimPointer() {
 	if g.OutOfScreen(g.mouseX, g.mouseY) {
@@ -8,7 +8,7 @@ func (g *Game) drawAimPointer() {
 	}
 
 	g.ResetStyle()
-	g.Foreground(style.ColorPointer)
+	g.Foreground(color.ColorPointer)
 	g.PatchChar(g.mouseX-1, g.mouseY, '❯')
 	g.PatchChar(g.mouseX+1, g.mouseY, '❮')
 	g.ResetStyle()

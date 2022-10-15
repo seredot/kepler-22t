@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/seredot/kepler-22t/style"
+	"github.com/seredot/kepler-22t/color"
 	"gonum.org/v1/gonum/interp"
 )
 
@@ -24,7 +24,7 @@ func (g *Game) drawHud() {
 	pb.Fit(xs, bs)
 
 	for x := 0; x < g.width; x++ {
-		g.Background(style.ColorRGB(
+		g.Background(color.NewColorIntRGB(
 			uint64(pr.Predict(float64(x))),
 			uint64(pg.Predict(float64(x))),
 			uint64(pb.Predict(float64(x)))))
