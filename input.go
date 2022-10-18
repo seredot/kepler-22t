@@ -15,7 +15,6 @@ func (g *Game) processInput() bool {
 			keyRune := ev.Rune()
 
 			if key == tcell.KeyEscape || key == tcell.KeyCtrlC {
-				g.clear()
 				g.screen.Fini()
 				return false
 			} else if key == tcell.KeyLeft || keyRune == 'a' {
@@ -36,10 +35,9 @@ func (g *Game) processInput() bool {
 			// Only process button events, not wheel events
 			button &= tcell.ButtonMask(0xff)
 
-			//if button == tcell.ButtonNone {
 			g.mouseX = x
 			g.mouseY = y
-			//}
+
 			switch ev.Buttons() {
 			case tcell.ButtonPrimary:
 				g.fire()

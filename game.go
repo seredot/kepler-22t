@@ -6,15 +6,17 @@ import (
 
 	"github.com/gdamore/tcell/v2"
 	opensimplex "github.com/ojrac/opensimplex-go"
+	"github.com/seredot/kepler-22t/color"
 	"github.com/seredot/kepler-22t/vector"
 )
 
 type Game struct {
 	// Canvas
-	canvas   Canvas
-	screen   tcell.Screen
-	defStyle tcell.Style
-	style    tcell.Style
+	canvas  Canvas
+	cells   []Cell
+	screen  tcell.Screen
+	fgColor color.Color
+	bgColor color.Color
 
 	coords Coords
 	width  int // screen width
@@ -48,9 +50,9 @@ func NewGame() *Game {
 	g.coords = g
 	g.canvas = g
 
-	g.defStyle = DefaultStyle
-
 	// Initialize screen
+	g.cells = []Cell{}
+
 	s, err := tcell.NewScreen()
 	if err != nil {
 		log.Fatalf("%+v", err)
@@ -61,7 +63,7 @@ func NewGame() *Game {
 	g.screen = s
 	s.EnableMouse()
 	g.calcScreenSize()
-	g.clear()
+	g.ResetStyle()
 
 	// Player initials
 	g.player = NewPlayer(g, 10, 10)
@@ -139,6 +141,10 @@ func (g *Game) drawBullets() {
 	}
 }
 
+func (g *Game) resetScreen() {
+	g.cells = make([]Cell, g.width*g.height)
+}
+
 func (g *Game) Loop() {
 	lastFrameT := time.Now()
 	g.deltaT = 10 * time.Millisecond
@@ -148,16 +154,16 @@ func (g *Game) Loop() {
 			return
 		}
 
+		g.resetScreen()
 		g.spawnAlien()
 		g.calcScreenSize()
-		g.clear()
 		g.drawTerrain()
 		g.moveAliens()
 		g.drawAliens()
-		g.player.move(g.timing, g.coords)
-		g.player.draw(g.canvas)
 		g.moveBullets()
 		g.drawBullets()
+		g.player.move(g.timing, g.coords)
+		g.player.draw(g.canvas)
 		hitBullets(g.bullets, g.aliens)
 		g.drawAimPointer()
 		g.drawHud()

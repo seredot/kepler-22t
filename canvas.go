@@ -14,23 +14,30 @@ type Canvas interface {
 	OutOfScreen(x, y int) bool
 	PutChar(x, y int, r rune)
 	PatchChar(x, y int, r rune)
+	PutColor(x, y int)
 	DrawTextTransparent(x, y int, text string)
 	DrawText(x, y int, text string)
 }
 
-var DefaultStyle = tcell.Style(tcell.StyleDefault.Background(tcell.ColorBlack).Foreground(tcell.ColorWhite).Blink(false))
+type Cell struct {
+	fgColor color.Color
+	bgColor color.Color
+	char    rune
+}
 
 func ColorConv(c color.Color) tcell.Color {
 	return tcell.Color(uint64(tcell.ColorIsRGB) | uint64(tcell.ColorValid) | uint64(c.R*255.0)<<16 | uint64(c.G*255.0)<<8 | uint64(c.B*255.0))
 }
 
-func (g *Game) clear() {
-	// Since all the screen is redrawn every frame,
-	// it is not necessary to clear the screen.
-	g.screen.SetStyle(tcell.Style(g.defStyle))
-}
-
 func (g *Game) sync() {
+	for y := 0; y < g.height; y++ {
+		for x := 0; x < g.width; x++ {
+			cell := g.getCell(x, y)
+			g.screen.SetContent(x, y, cell.char, nil,
+				tcell.Style(tcell.StyleDefault).Background(ColorConv(cell.bgColor)).Foreground(ColorConv(cell.fgColor)))
+		}
+	}
+
 	g.screen.Show()
 }
 
@@ -39,15 +46,16 @@ func (g *Game) screenSize() (width, height int) {
 }
 
 func (g *Game) ResetStyle() {
-	g.style = g.defStyle
+	g.bgColor = color.ColorBlack
+	g.fgColor = color.ColorWhite
 }
 
 func (g *Game) Background(c color.Color) {
-	g.style = g.style.Background(ColorConv(c))
+	g.bgColor = c
 }
 
 func (g *Game) Foreground(c color.Color) {
-	g.style = g.style.Foreground(ColorConv(c))
+	g.fgColor = c
 }
 
 func (g *Game) OutOfScreen(x, y int) bool {
@@ -58,12 +66,19 @@ func (g *Game) OutOfScreen(x, y int) bool {
 	return false
 }
 
+func (g *Game) getCell(x, y int) *Cell {
+	return &(g.cells[y*g.width+x])
+}
+
 func (g *Game) PutChar(x, y int, r rune) {
 	if g.OutOfScreen(x, y) {
 		return
 	}
 
-	g.screen.SetContent(x, y, r, nil, tcell.Style(g.style))
+	cell := &g.cells[y*g.width+x]
+	cell.char = r
+	cell.fgColor = g.fgColor
+	cell.bgColor = g.bgColor
 }
 
 func (g *Game) PatchChar(x, y int, r rune) {
@@ -71,10 +86,19 @@ func (g *Game) PatchChar(x, y int, r rune) {
 		return
 	}
 
-	_, _, bgStyle, _ := g.screen.GetContent(x, y)
-	fgColor, _, _ := tcell.Style(g.style).Decompose()
-	mergedStyle := bgStyle.Foreground(fgColor)
-	g.screen.SetContent(x, y, r, nil, tcell.Style(mergedStyle))
+	cell := &g.cells[y*g.width+x]
+	cell.char = r
+	cell.fgColor = g.fgColor
+}
+
+func (g *Game) PutColor(x, y int) {
+	if g.OutOfScreen(x, y) {
+		return
+	}
+
+	cell := &g.cells[y*g.width+x]
+	cell.fgColor = g.fgColor
+	cell.bgColor = g.bgColor
 }
 
 func (g *Game) DrawTextTransparent(x, y int, text string) {
