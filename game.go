@@ -142,6 +142,7 @@ func (g *Game) drawBullets() {
 }
 
 func (g *Game) resetScreen() {
+	g.calcScreenSize()
 	g.cells = make([]Cell, g.width*g.height)
 }
 
@@ -156,7 +157,6 @@ func (g *Game) Loop() {
 
 		g.resetScreen()
 		g.spawnAlien()
-		g.calcScreenSize()
 		g.moveAliens()
 		g.drawAliens()
 		g.moveBullets()
