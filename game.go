@@ -157,7 +157,6 @@ func (g *Game) Loop() {
 		g.resetScreen()
 		g.spawnAlien()
 		g.calcScreenSize()
-		g.drawTerrain()
 		g.moveAliens()
 		g.drawAliens()
 		g.moveBullets()
@@ -165,6 +164,7 @@ func (g *Game) Loop() {
 		g.player.move(g.timing, g.coords)
 		g.player.draw(g.canvas)
 		hitBullets(g.bullets, g.aliens)
+		g.drawFog()
 		g.drawAimPointer()
 		g.drawHud()
 

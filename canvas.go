@@ -97,8 +97,8 @@ func (g *Game) PutColor(x, y int) {
 	}
 
 	cell := &g.cells[y*g.width+x]
-	cell.fgColor = g.fgColor
-	cell.bgColor = g.bgColor
+	cell.bgColor = cell.bgColor.Blend(g.bgColor)
+	cell.fgColor = cell.fgColor.Blend(g.fgColor)
 }
 
 func (g *Game) DrawTextTransparent(x, y int, text string) {

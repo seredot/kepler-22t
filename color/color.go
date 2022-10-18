@@ -30,6 +30,15 @@ func NewColorIntRGB(r, g, b uint64) Color {
 	return NewColorIntRGBA(r, g, b, 255)
 }
 
+func (c Color) Blend(a Color) Color {
+	return Color{
+		R: c.R*(1-a.A) + a.R*a.A,
+		G: c.G*(1-a.A) + a.G*a.A,
+		B: c.B*(1-a.A) + a.B*a.A,
+		A: 1,
+	}
+}
+
 // Function is based on https://github.com/hisamafahri/coco/blob/main/hsl.go
 func Hsl2Rgb(h float64, s float64, l float64) Color {
 	h = h / 360
