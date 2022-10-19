@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"time"
 	"unicode/utf8"
 
@@ -33,12 +34,17 @@ func (g *Game) drawHud() {
 	}
 
 	// Title
-	g.DrawTextTransparent(1, 0, "Kepler 22t")
+	g.DrawText(1, 0, "Kepler 22t")
 	// Score
 	score := fmt.Sprintf("☠%d", g.score)
-	g.DrawTextTransparent(g.width-1-utf8.RuneCountInString(score), 0, score)
+	leftOffset := g.width - 1 - utf8.RuneCountInString(score)
+	g.DrawText(leftOffset, 0, score)
+	// Health
+	health := fmt.Sprintf("✚%d", int(math.Round(g.health)))
+	leftOffset -= 1 + utf8.RuneCountInString(health)
+	g.DrawText(leftOffset, 0, health)
 	// Stats
-	g.DrawTextTransparent(2, g.height-1, fmt.Sprintf(" Fr %d | FPS %0.2f ", g.frame, float64(time.Second/g.deltaT)))
+	g.DrawText(2, g.height-1, fmt.Sprintf(" Fr %d | FPS %0.2f ", g.frame, float64(time.Second/g.deltaT)))
 	// Debug log
 	//g.drawText(22, g.height-1, fmt.Sprintf(" Color %d %x ", g.screen.Colors(), style.Hsl2Rgb(242, 26, 43)))
 }

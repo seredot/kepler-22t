@@ -15,7 +15,6 @@ type Canvas interface {
 	PutChar(x, y int, r rune)
 	PatchChar(x, y int, r rune)
 	PutColor(x, y int)
-	DrawTextTransparent(x, y int, text string)
 	DrawText(x, y int, text string)
 }
 
@@ -101,14 +100,8 @@ func (g *Game) PutColor(x, y int) {
 	cell.fgColor = cell.fgColor.Blend(g.fgColor)
 }
 
-func (g *Game) DrawTextTransparent(x, y int, text string) {
-	for i, r := range []rune(text) {
-		g.PatchChar(x+i, y, r)
-	}
-}
-
 func (g *Game) DrawText(x, y int, text string) {
 	for i, r := range []rune(text) {
-		g.PutChar(x+i, y, r)
+		g.PatchChar(x+i, y, r)
 	}
 }
