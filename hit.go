@@ -11,17 +11,18 @@ const HitRange = 0.75
 
 func hitBullets(g *Game, bullets []*Bullet, aliens []*Alien) {
 	for _, b := range bullets {
-		for _, e := range aliens {
-			if e.energy > 0 && !b.hasHit && math.Abs(b.x-e.x) < HitRange && math.Abs(b.y-e.y) < HitRange {
-				e.energy = math.Max(0, e.energy-b.damage)
-				e.fgColor = color.ColorAlien.Blend(color.Color{R: 0, G: 0, B: 0, A: 0.7 * (1 - e.energy/e.maxEnergy)})
+		for _, a := range aliens {
+			if a.energy > 0 && !b.hasHit && math.Abs(b.x-a.x) < HitRange && math.Abs(b.y-a.y) < HitRange {
+				a.energy = math.Max(0, a.energy-b.damage)
+				a.fgColor = color.ColorAlien.Blend(color.Color{R: 0, G: 0, B: 0, A: 0.7 * (1 - a.energy/a.maxEnergy)})
 				b.hit()
-				g.addEffects(NewRedSpill(e.x, e.y))
+				g.addEffects(NewRedSpill(a.x, a.y))
 
-				if e.energy <= 0 {
+				if a.energy <= 0 {
 					g.score++
-					e.speed = 0
-					e.removeIn(time.Second)
+					a.sprite = '☠'
+					a.speed = 0
+					a.removeIn(time.Second)
 				}
 			}
 		}
