@@ -14,7 +14,7 @@ func NewPlayer(game *Game, x, y int) *Player {
 			dx:     1,
 			dy:     0,
 			drag:   20,
-			sprite: 'X',
+			sprite: '◉',
 			color:  color.ColorPlayer,
 		},
 	}
@@ -28,16 +28,6 @@ func (p *Player) direction(dx, dy float64) {
 
 	p.dx = dx
 	p.dy = dy
-
-	if dx == -1 {
-		p.sprite = '◀'
-	} else if dx == 1 {
-		p.sprite = '▶'
-	} else if dy == -1 {
-		p.sprite = '▲'
-	} else {
-		p.sprite = '▼'
-	}
 }
 
 func (p *Player) move(t Timing, c Coords) {

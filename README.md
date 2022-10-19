@@ -16,7 +16,7 @@ A shooter / survival game running on terminal.
 
 ## Instructions
 
-Use arrow keys to move around. Press `space` to fire. Because of the terminal
+Use arrow keys to move around, mouse for aim and fire. Because of the terminal
 input restrictions press arrow keys repeatedly to be able to move while firing.
 
 ## Notes
