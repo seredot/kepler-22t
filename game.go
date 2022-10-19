@@ -111,14 +111,21 @@ func (g *Game) spawnAlien() {
 }
 
 func (g *Game) moveAliens() {
-	for _, e := range g.aliens {
-		e.move(g.timing, g.coords)
+	nextAliens := make([]*Alien, 0, len(g.aliens))
+
+	for _, a := range g.aliens {
+		a.move(g.timing, g.coords)
+		if !a.removed {
+			nextAliens = append(nextAliens, a)
+		}
 	}
+
+	g.aliens = nextAliens
 }
 
 func (g *Game) drawAliens() {
-	for _, e := range g.aliens {
-		e.draw(g.canvas)
+	for _, a := range g.aliens {
+		a.draw(g.canvas)
 	}
 }
 

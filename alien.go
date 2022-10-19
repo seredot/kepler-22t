@@ -7,7 +7,8 @@ import (
 
 type Alien struct {
 	Object
-	energy float64
+	maxEnergy float64
+	energy    float64
 }
 
 func NewAlien(game *Game) *Alien {
@@ -22,7 +23,8 @@ func NewAlien(game *Game) *Alien {
 			sprite: '✹',
 			color:  color.ColorAlien,
 		},
-		energy: 100.0,
+		maxEnergy: 100.0,
+		energy:    100.0,
 	}
 
 	return e

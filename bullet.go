@@ -22,13 +22,14 @@ func NewBullet(x, y, dx, dy, speed float64) *Bullet {
 			sprite: '•',
 			color:  color.ColorBullet,
 		},
-		damage: 40,
+		damage: 40.0,
 	}
 
 	return b
 }
 
 func (b *Bullet) hit() {
+	b.damage = 0
 	b.Object.speed = 0
 	b.Object.sprite = '✧'
 	b.Object.removeIn(time.Millisecond * 150)
