@@ -103,6 +103,7 @@ func (g *Game) fire() {
 	dy := float64(g.mouseY) - g.player.y
 	dx, dy = vector.Norm(dx, dy)
 	g.bullets = append(g.bullets, NewBullet(g.player.x, g.player.y, dx, dy, 30))
+	g.addEffects(NewGunFlash(g.player.x, g.player.y)...)
 }
 
 func (g *Game) spawnAlien() {
