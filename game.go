@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"math"
 	"time"
 
 	"github.com/gdamore/tcell/v2"
@@ -123,6 +124,10 @@ func (g *Game) moveAliens() {
 		a.move(g.timing, g.coords)
 		if !a.removed {
 			next = append(next, a)
+
+			if a.reaches {
+				g.health = math.Max(0, g.health-a.damage*g.timing.DeltaT().Seconds())
+			}
 		}
 	}
 

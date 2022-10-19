@@ -9,6 +9,8 @@ type Alien struct {
 	Object
 	maxEnergy float64
 	energy    float64
+	damage    float64 // damage per second
+	reaches   bool    // player is in reach and getting damage
 }
 
 func NewAlien(game *Game) *Alien {
@@ -25,18 +27,22 @@ func NewAlien(game *Game) *Alien {
 		},
 		maxEnergy: 100.0,
 		energy:    100.0,
+		damage:    5.0,
 	}
 
 	return e
 }
 
-func (e *Alien) move(t Timing, c Coords) {
-	dx := c.PlayerX() - e.x
-	dy := c.PlayerY() - e.y
+func (a *Alien) move(t Timing, c Coords) {
+	dx := c.PlayerX() - a.x
+	dy := c.PlayerY() - a.y
 	dist := vector.Mag(dx, dy)
-	e.dx, e.dy = vector.Norm(dx, dy)
+	a.dx, a.dy = vector.Norm(dx, dy)
 
-	if dist > 1.0 {
-		e.Object.move(t, c)
+	if dist > 1.0 && a.energy > 0 {
+		a.Object.move(t, c)
+		a.reaches = false
+	} else {
+		a.reaches = true
 	}
 }
