@@ -41,11 +41,15 @@ type Game struct {
 	effects []*Effect
 
 	// Misc
-	noise opensimplex.Noise
+	score  int
+	health float64
+	noise  opensimplex.Noise
 }
 
 func NewGame() *Game {
 	g := &Game{}
+
+	g.health = 100.0
 
 	g.timing = g
 	g.coords = g

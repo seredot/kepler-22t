@@ -19,6 +19,7 @@ func hitBullets(g *Game, bullets []*Bullet, aliens []*Alien) {
 				g.addEffects(NewRedSpill(e.x, e.y))
 
 				if e.energy <= 0 {
+					g.score++
 					e.speed = 0
 					e.removeIn(time.Second)
 				}

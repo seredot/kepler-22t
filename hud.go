@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"time"
+	"unicode/utf8"
 
 	"github.com/seredot/kepler-22t/color"
 	"gonum.org/v1/gonum/interp"
@@ -32,7 +33,10 @@ func (g *Game) drawHud() {
 	}
 
 	// Title
-	g.DrawTextTransparent(2, 0, " Kepler 22t ")
+	g.DrawTextTransparent(1, 0, "Kepler 22t")
+	// Score
+	score := fmt.Sprintf("☠%d", g.score)
+	g.DrawTextTransparent(g.width-1-utf8.RuneCountInString(score), 0, score)
 	// Stats
 	g.DrawTextTransparent(2, g.height-1, fmt.Sprintf(" Fr %d | FPS %0.2f ", g.frame, float64(time.Second/g.deltaT)))
 	// Debug log
