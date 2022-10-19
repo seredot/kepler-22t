@@ -9,13 +9,13 @@ type Player struct {
 func NewPlayer(game *Game, x, y int) *Player {
 	p := &Player{
 		Object: Object{
-			x:      float64(x) - 1,
-			y:      float64(y),
-			dx:     1,
-			dy:     0,
-			drag:   20,
-			sprite: '◉',
-			color:  color.ColorPlayer,
+			x:       float64(x) - 1,
+			y:       float64(y),
+			dx:      1,
+			dy:      0,
+			drag:    20,
+			sprite:  '◉',
+			fgColor: color.ColorPlayer,
 		},
 	}
 
@@ -31,7 +31,7 @@ func (p *Player) direction(dx, dy float64) {
 }
 
 func (p *Player) move(t Timing, c Coords) {
-	p.Object.move(t)
+	p.Object.move(t, c)
 
 	if p.x < float64(c.Left()) {
 		p.x = float64(c.Left())

@@ -17,11 +17,11 @@ func NewAlien(game *Game) *Alien {
 
 	e := &Alien{
 		Object: Object{
-			x:      x,
-			y:      y,
-			speed:  1,
-			sprite: '✹',
-			color:  color.ColorAlien,
+			x:       x,
+			y:       y,
+			speed:   1,
+			sprite:  '✹',
+			fgColor: color.ColorAlien,
 		},
 		maxEnergy: 100.0,
 		energy:    100.0,
@@ -37,6 +37,6 @@ func (e *Alien) move(t Timing, c Coords) {
 	e.dx, e.dy = vector.Norm(dx, dy)
 
 	if dist > 1.0 {
-		e.Object.move(t)
+		e.Object.move(t, c)
 	}
 }

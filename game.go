@@ -38,6 +38,7 @@ type Game struct {
 	player  *Player
 	aliens  []*Alien
 	bullets []*Bullet
+	effects []*Effect
 
 	// Misc
 	noise opensimplex.Noise
@@ -111,16 +112,16 @@ func (g *Game) spawnAlien() {
 }
 
 func (g *Game) moveAliens() {
-	nextAliens := make([]*Alien, 0, len(g.aliens))
+	next := make([]*Alien, 0, len(g.aliens))
 
 	for _, a := range g.aliens {
 		a.move(g.timing, g.coords)
 		if !a.removed {
-			nextAliens = append(nextAliens, a)
+			next = append(next, a)
 		}
 	}
 
-	g.aliens = nextAliens
+	g.aliens = next
 }
 
 func (g *Game) drawAliens() {
@@ -130,21 +131,44 @@ func (g *Game) drawAliens() {
 }
 
 func (g *Game) moveBullets() {
-	nextBullets := make([]*Bullet, 0, len(g.bullets))
+	next := make([]*Bullet, 0, len(g.bullets))
 
 	for _, b := range g.bullets {
 		b.move(g.timing, g.coords)
 		if !b.removed {
-			nextBullets = append(nextBullets, b)
+			next = append(next, b)
 		}
 	}
 
-	g.bullets = nextBullets
+	g.bullets = next
 }
 
 func (g *Game) drawBullets() {
 	for _, b := range g.bullets {
 		b.draw(g.canvas)
+	}
+}
+
+func (g *Game) addEffects(elems ...*Effect) {
+	g.effects = append(g.effects, elems...)
+}
+
+func (g *Game) moveEffects() {
+	next := make([]*Effect, 0, len(g.effects))
+
+	for _, e := range g.effects {
+		e.move(g.timing, g.coords)
+		if !e.removed {
+			next = append(next, e)
+		}
+	}
+
+	g.effects = next
+}
+
+func (g *Game) drawEffects() {
+	for _, e := range g.effects {
+		e.draw(g.canvas)
 	}
 }
 
@@ -170,7 +194,9 @@ func (g *Game) Loop() {
 		g.drawBullets()
 		g.player.move(g.timing, g.coords)
 		g.player.draw(g.canvas)
-		hitBullets(g.bullets, g.aliens)
+		hitBullets(g, g.bullets, g.aliens)
+		g.moveEffects()
+		g.drawEffects()
 		g.drawFog()
 		g.drawAimPointer()
 		g.drawHud()

@@ -13,7 +13,8 @@ type Object struct {
 	speed   float64
 	drag    float64
 	sprite  rune
-	color   color.Color
+	fgColor color.Color
+	bgColor color.Color
 	removed bool
 }
 
@@ -23,7 +24,7 @@ func (o *Object) removeIn(t time.Duration) {
 	})
 }
 
-func (o *Object) move(t Timing) {
+func (o *Object) move(t Timing, c Coords) {
 	o.x += o.dx * t.DeltaT().Seconds() * o.speed
 	o.y += o.dy * t.DeltaT().Seconds() * o.speed
 	o.speed = math.Max(0, o.speed-t.DeltaT().Seconds()*o.drag)
@@ -39,7 +40,8 @@ func (o *Object) scrY() int {
 
 func (o *Object) draw(c Canvas) {
 	c.ResetStyle()
-	c.Foreground(o.color)
+	c.Foreground(o.fgColor)
+	c.Background(o.bgColor)
 	c.PatchChar(o.scrX(), o.scrY(), o.sprite)
 	c.ResetStyle()
 }

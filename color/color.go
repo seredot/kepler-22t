@@ -9,12 +9,14 @@ type Color struct {
 }
 
 var (
-	ColorPlayer  = Color{.9, .9, 1, 1}
-	ColorPointer = Color{0, 1, 0, 1}
-	ColorBullet  = Color{1, 1, 0, 1}
-	ColorAlien   = Color{1, 0, 0, 1}
-	ColorBlack   = Color{0, 0, 0, 1}
-	ColorWhite   = Color{1, 1, 1, 1}
+	ColorPlayer      = Color{.9, .9, 1, 1}
+	ColorPointer     = Color{0, 1, 0, 1}
+	ColorBullet      = Color{1, 1, 0, 1}
+	ColorAlien       = Color{1, 0, 0, 1}
+	ColorRedSpill    = Color{1, 0, 0, 0.3}
+	ColorBlack       = Color{0, 0, 0, 1}
+	ColorWhite       = Color{1, 1, 1, 1}
+	ColorTransparent = Color{0, 0, 0, 0}
 )
 
 func NewColorIntRGBA(r, g, b, a uint64) Color {
@@ -36,6 +38,15 @@ func (c Color) Blend(a Color) Color {
 		G: c.G*(1-a.A) + a.G*a.A,
 		B: c.B*(1-a.A) + a.B*a.A,
 		A: 1,
+	}
+}
+
+func (c Color) Interpolate(a Color, r float64) Color {
+	return Color{
+		R: c.R*(1-r) + a.R*r,
+		G: c.G*(1-r) + a.G*r,
+		B: c.B*(1-r) + a.B*r,
+		A: c.A*(1-r) + a.A*r,
 	}
 }
 
