@@ -11,7 +11,7 @@ func (g *Game) drawFog() {
 	zoom := 8.0
 	ambient := 0.15
 	strength := 0.3
-	seconds := float64(g.totalT.Seconds())
+	seconds := float64(g.totalT.Seconds()) * .25
 
 	for x := 0; x < g.width; x++ {
 		for y := 0; y < g.height; y++ {
