@@ -12,7 +12,7 @@ var (
 	ColorPlayer      = Color{.9, .9, 1, 1}
 	ColorPointer     = Color{0, 1, 0, 1}
 	ColorBullet      = Color{1, 1, 0, 1}
-	ColorAlien       = Color{1, 0, 0, 1}
+	ColorAlien       = Color{0, .7, .1, 1}
 	ColorRedSpill    = Color{1, 0, 0, 0.3}
 	ColorBlack       = Color{0, 0, 0, 1}
 	ColorWhite       = Color{1, 1, 1, 1}
