@@ -10,17 +10,17 @@ func (g *Game) drawFog() {
 
 	zoom := 8.0
 	ambient := 0.15
-	strength := 0.2
+	strength := 0.3
 	seconds := float64(g.totalT.Seconds())
 
 	for x := 0; x < g.width; x++ {
 		for y := 0; y < g.height; y++ {
-			luminosity := ambient + strength*g.noise.Eval3(
+			alpha := ambient + strength*g.noise.Eval3(
 				float64(x)/zoom+seconds*0.4,
 				float64(y)/zoom+seconds*0.4,
 				seconds,
 			)
-			c := color.Color{R: .8, G: .6, B: 1, A: luminosity}
+			c := color.Color{R: .8, G: .6, B: 1, A: alpha}
 			g.Background(c)
 			g.Foreground(c)
 
