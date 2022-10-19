@@ -9,14 +9,17 @@ type Color struct {
 }
 
 var (
+	ColorTransparent = Color{0, 0, 0, 0}
+	ColorBlack       = Color{0, 0, 0, 1}
+	ColorWhite       = Color{.9, .9, .9, 1}
+	ColorGrey        = Color{.4, .4, .4, 1}
+	ColorAmber       = Color{1, .75, 0, 1}
+	ColorCrossRed    = Color{.8, 0, 0, 1}
 	ColorPlayer      = Color{.9, .9, 1, 1}
 	ColorPointer     = Color{0, 1, 0, 1}
 	ColorBullet      = Color{1, 1, 0, 1}
 	ColorAlien       = Color{0, .7, .1, 1}
 	ColorRedSpill    = Color{1, 0, 0, 0.3}
-	ColorBlack       = Color{0, 0, 0, 1}
-	ColorWhite       = Color{1, 1, 1, 1}
-	ColorTransparent = Color{0, 0, 0, 0}
 )
 
 func NewColorIntRGBA(r, g, b, a uint64) Color {

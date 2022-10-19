@@ -51,6 +51,7 @@ type Game struct {
 	state  GameState
 	score  int
 	health float64
+	ammo   int
 	noise  opensimplex.Noise
 }
 
@@ -88,6 +89,7 @@ func NewGame() *Game {
 func (g *Game) reset() {
 	g.health = 100.0
 	g.score = 0
+	g.ammo = 100
 	g.player = NewPlayer(g, 10, 10)
 	g.aliens = []*Alien{}
 	g.bullets = []*Bullet{}

@@ -21,7 +21,7 @@ func NewBullet(x, y, dx, dy, speed float64) *Bullet {
 			dy:      dy,
 			speed:   speed,
 			sprite:  '•',
-			fgColor: color.ColorBullet,
+			fgColor: color.ColorAmber,
 		},
 		damage: 40.0,
 		hasHit: false,

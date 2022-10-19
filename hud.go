@@ -39,18 +39,38 @@ func (g *Game) drawHud() {
 
 	// Title
 	g.DrawText(1, 0, "Kepler 22t")
+
 	// Score
-	score := fmt.Sprintf("☠%d", g.score)
+	score := fmt.Sprintf(" %d", g.score)
 	textX = g.width - 1 - utf8.RuneCountInString(score)
+	g.Foreground(color.ColorWhite)
 	g.DrawText(textX, 0, score)
+	textX--
+	g.Foreground(color.ColorAlien)
+	g.DrawText(textX, 0, "☠")
+	g.ResetStyle()
+
 	// Health
-	health := fmt.Sprintf("✚%d", int(math.Round(g.health)))
+	health := fmt.Sprintf(" %d ", int(math.Round(g.health)))
 	textX -= 1 + utf8.RuneCountInString(health)
 	g.DrawText(textX, 0, health)
+	textX--
+	g.Foreground(color.ColorCrossRed)
+	g.DrawText(textX, 0, "✚")
+	g.ResetStyle()
+
+	// Ammo
+	ammo := fmt.Sprintf(" %d ", g.ammo)
+	textX -= 1 + utf8.RuneCountInString(ammo)
+	g.DrawText(textX, 0, ammo)
+	textX--
+	g.Foreground(color.ColorAmber)
+	g.DrawText(textX, 0, "⁍")
+	g.ResetStyle()
+
 	// Game over
 	if g.state == GameOver {
 		var m string
-		g.ResetStyle()
 		g.Background(color.ColorRedSpill)
 		m = "      GAME OVER       "
 		textX = (g.width - utf8.RuneCountInString(m)) / 2
@@ -63,7 +83,7 @@ func (g *Game) drawHud() {
 		g.ResetStyle()
 	}
 	// Stats
-	g.DrawText(2, g.height-1, fmt.Sprintf(" Fr %d | FPS %0.2f ", g.frame, float64(time.Second/g.deltaT)))
+	g.DrawText(2, g.height-1, fmt.Sprintf("FPS %0.2f", float64(time.Second/g.deltaT)))
 	// Debug log
 	//g.drawText(22, g.height-1, fmt.Sprintf(" Color %d %x ", g.screen.Colors(), style.Hsl2Rgb(242, 26, 43)))
 }
