@@ -2,13 +2,19 @@ package main
 
 import (
 	"log"
-	"math"
 	"time"
 
 	"github.com/gdamore/tcell/v2"
 	opensimplex "github.com/ojrac/opensimplex-go"
 	"github.com/seredot/kepler-22t/color"
 	"github.com/seredot/kepler-22t/vector"
+)
+
+type GameState int
+
+const (
+	Playing GameState = iota
+	GameOver
 )
 
 type Game struct {
@@ -42,6 +48,7 @@ type Game struct {
 	effects []*Effect
 
 	// Misc
+	state  GameState
 	score  int
 	health float64
 	noise  opensimplex.Noise
@@ -49,8 +56,6 @@ type Game struct {
 
 func NewGame() *Game {
 	g := &Game{}
-
-	g.health = 100.0
 
 	g.timing = g
 	g.coords = g
@@ -71,15 +76,22 @@ func NewGame() *Game {
 	g.calcScreenSize()
 	g.ResetStyle()
 
-	// Player initials
-	g.player = NewPlayer(g, 10, 10)
-	g.aliens = []*Alien{}
-	g.bullets = []*Bullet{}
-
 	// Random noise generator
 	g.noise = opensimplex.NewNormalized(110783)
 
+	// Game initials
+	g.reset()
+
 	return g
+}
+
+func (g *Game) reset() {
+	g.health = 100.0
+	g.score = 0
+	g.player = NewPlayer(g, 10, 10)
+	g.aliens = []*Alien{}
+	g.bullets = []*Bullet{}
+	g.state = Playing
 }
 
 func (g *Game) calcScreenSize() {
@@ -124,10 +136,6 @@ func (g *Game) moveAliens() {
 		a.move(g.timing, g.coords)
 		if !a.removed {
 			next = append(next, a)
-
-			if a.reaches {
-				g.health = math.Max(0, g.health-a.damage*g.timing.DeltaT().Seconds())
-			}
 		}
 	}
 
@@ -204,7 +212,7 @@ func (g *Game) Loop() {
 		g.drawBullets()
 		g.player.move(g.timing, g.coords)
 		g.player.draw(g.canvas)
-		hitBullets(g, g.bullets, g.aliens)
+		g.checkCollisions()
 		g.moveEffects()
 		g.drawEffects()
 		g.drawFog()

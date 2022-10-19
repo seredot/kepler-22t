@@ -33,16 +33,35 @@ func (g *Game) drawHud() {
 		g.PutChar(x, 0, ' ')
 	}
 
+	g.ResetStyle()
+
+	var textX, textY int
+
 	// Title
 	g.DrawText(1, 0, "Kepler 22t")
 	// Score
 	score := fmt.Sprintf("☠%d", g.score)
-	leftOffset := g.width - 1 - utf8.RuneCountInString(score)
-	g.DrawText(leftOffset, 0, score)
+	textX = g.width - 1 - utf8.RuneCountInString(score)
+	g.DrawText(textX, 0, score)
 	// Health
 	health := fmt.Sprintf("✚%d", int(math.Round(g.health)))
-	leftOffset -= 1 + utf8.RuneCountInString(health)
-	g.DrawText(leftOffset, 0, health)
+	textX -= 1 + utf8.RuneCountInString(health)
+	g.DrawText(textX, 0, health)
+	// Game over
+	if g.state == GameOver {
+		var m string
+		g.ResetStyle()
+		g.Background(color.ColorRedSpill)
+		m = "      GAME OVER       "
+		textX = (g.width - utf8.RuneCountInString(m)) / 2
+		textY = (g.height / 2)
+		g.DrawText(textX, textY, m)
+		m = " press enter to start "
+		textX = (g.width - utf8.RuneCountInString(m)) / 2
+		textY++
+		g.DrawText(textX, textY, m)
+		g.ResetStyle()
+	}
 	// Stats
 	g.DrawText(2, g.height-1, fmt.Sprintf(" Fr %d | FPS %0.2f ", g.frame, float64(time.Second/g.deltaT)))
 	// Debug log

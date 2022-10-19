@@ -45,7 +45,7 @@ func (g *Game) screenSize() (width, height int) {
 }
 
 func (g *Game) ResetStyle() {
-	g.bgColor = color.ColorBlack
+	g.bgColor = color.ColorTransparent
 	g.fgColor = color.ColorWhite
 }
 
@@ -76,8 +76,8 @@ func (g *Game) PutChar(x, y int, r rune) {
 
 	cell := &g.cells[y*g.width+x]
 	cell.char = r
-	cell.fgColor = g.fgColor
-	cell.bgColor = g.bgColor
+	cell.bgColor = cell.bgColor.Blend(g.bgColor)
+	cell.fgColor = cell.fgColor.Blend(g.fgColor)
 }
 
 func (g *Game) PatchChar(x, y int, r rune) {
@@ -87,7 +87,8 @@ func (g *Game) PatchChar(x, y int, r rune) {
 
 	cell := &g.cells[y*g.width+x]
 	cell.char = r
-	cell.fgColor = g.fgColor
+	cell.bgColor = cell.bgColor.Blend(g.bgColor)
+	cell.fgColor = cell.fgColor.Blend(g.fgColor)
 }
 
 func (g *Game) PutColor(x, y int) {
