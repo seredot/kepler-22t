@@ -25,15 +25,16 @@ type Game struct {
 	fgColor color.Color
 	bgColor color.Color
 
-	coords Coords
-	width  int // screen width
-	height int // screen height
-	left   int // left most playable area
-	right  int // right most playable area
-	top    int // top most playable area
-	bottom int // bottom most playable area
-	mouseX int
-	mouseY int
+	coords    Coords
+	width     int // screen width
+	height    int // screen height
+	left      int // left most playable area
+	right     int // right most playable area
+	top       int // top most playable area
+	bottom    int // bottom most playable area
+	mouseX    int
+	mouseY    int
+	mouseDown bool
 
 	// Timing
 	timing Timing
@@ -90,6 +91,7 @@ func (g *Game) reset() {
 	g.health = 100.0
 	g.score = 0
 	g.ammo = 100
+	g.mouseDown = false
 	g.player = NewPlayer(g, 10, 10)
 	g.aliens = []*Alien{}
 	g.bullets = []*Bullet{}
@@ -117,7 +119,11 @@ func (g *Game) calcScreenSize() {
 	g.bottom = g.height - 2
 }
 
-func (g *Game) fire() {
+func (g *Game) handleTrigger() {
+	if !g.mouseDown {
+		return
+	}
+
 	dx := float64(g.mouseX) - g.player.x
 	dy := float64(g.mouseY) - g.player.y
 	dx, dy = vector.Norm(dx, dy)
@@ -208,6 +214,7 @@ func (g *Game) Loop() {
 
 		g.resetScreen()
 		g.spawnAlien()
+		g.handleTrigger()
 		g.moveAliens()
 		g.drawAliens()
 		g.moveBullets()

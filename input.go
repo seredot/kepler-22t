@@ -28,8 +28,6 @@ func (g *Game) processInput() bool {
 					g.player.direction(0, -1)
 				} else if key == tcell.KeyDown || keyRune == 's' {
 					g.player.direction(0, 1)
-				} else if keyRune == ' ' {
-					g.fire()
 				}
 			}
 
@@ -42,16 +40,9 @@ func (g *Game) processInput() bool {
 			x, y := ev.Position()
 			button := ev.Buttons()
 
-			// Only process button events, not wheel events
-			button &= tcell.ButtonMask(0xff)
-
 			g.mouseX = x
 			g.mouseY = y
-
-			switch ev.Buttons() {
-			case tcell.ButtonPrimary:
-				g.fire()
-			}
+			g.mouseDown = button&tcell.Button1 != 0
 		}
 	}
 
