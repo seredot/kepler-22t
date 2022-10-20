@@ -1,6 +1,8 @@
 package main
 
 import (
+	"time"
+
 	"github.com/seredot/kepler-22t/color"
 	"github.com/seredot/kepler-22t/vector"
 )
@@ -21,7 +23,7 @@ func NewAlien(game *Game) *Alien {
 		Object: Object{
 			x:       x,
 			y:       y,
-			speed:   2.0,
+			speed:   3.0,
 			sprite:  '⚉',
 			fgColor: color.ColorAlien,
 		},
@@ -50,4 +52,11 @@ func (a *Alien) move(t Timing, c Coords) {
 	}
 
 	a.reaches = reaches
+}
+
+func (a *Alien) die() {
+	a.fgColor = color.ColorBlack
+	a.sprite = '☠'
+	a.speed = 0
+	a.removeIn(time.Second)
 }
