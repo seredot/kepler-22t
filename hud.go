@@ -84,6 +84,13 @@ func (g *Game) drawHud() {
 		g.ResetStyle()
 	}
 
+	// Gun
+	textX = g.width
+	textY = g.height - 1
+	g.Foreground(color.ColorAmber)
+	printRight(fmt.Sprintf(" %s ", g.gun.Name()))
+	g.ResetStyle()
+
 	// Debug
 	textX = 1
 	textY = g.height - 1
