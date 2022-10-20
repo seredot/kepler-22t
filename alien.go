@@ -22,7 +22,7 @@ func NewAlien(game *Game) *Alien {
 			x:       x,
 			y:       y,
 			speed:   2.0,
-			sprite:  '✹',
+			sprite:  '⚉',
 			fgColor: color.ColorAlien,
 		},
 		maxEnergy: 100.0,
