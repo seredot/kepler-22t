@@ -64,7 +64,11 @@ func (g *Game) drawHud() {
 	g.ResetStyle()
 
 	// Ammo
-	printRight(fmt.Sprintf(" %d ", g.ammo))
+	if g.ammo == -1 {
+		printRight(" ∞ ")
+	} else {
+		printRight(fmt.Sprintf(" %d ", g.ammo))
+	}
 	g.Foreground(color.ColorAmber)
 	printRight("⁍")
 	g.ResetStyle()

@@ -92,7 +92,7 @@ func NewGame() *Game {
 func (g *Game) reset() {
 	g.health = 100.0
 	g.score = 0
-	g.ammo = 100
+	g.ammo = 30
 	g.gun = MachineGun{}
 	g.mouseDown = false
 	g.player = NewPlayer(g, 10, 10)
@@ -131,13 +131,21 @@ func (g *Game) handleTrigger() {
 		return
 	}
 
-	g.fireT = time.Now()
+	if g.ammo != 0 {
+		g.fireT = time.Now()
+		g.ammo--
 
-	dx := float64(g.mouseX) - g.player.x
-	dy := float64(g.mouseY) - g.player.y
-	dx, dy = vector.Norm(dx, dy)
-	g.bullets = append(g.bullets, NewBullet(g.player.x, g.player.y, dx, dy, 30))
-	g.addEffects(NewGunFlash(g.player.x, g.player.y)...)
+		dx := float64(g.mouseX) - g.player.x
+		dy := float64(g.mouseY) - g.player.y
+		dx, dy = vector.Norm(dx, dy)
+		g.bullets = append(g.bullets, NewBullet(g.player.x, g.player.y, dx, dy, 30))
+		g.addEffects(NewGunFlash(g.player.x, g.player.y)...)
+	}
+
+	if g.ammo <= 0 {
+		g.gun = Pistol{}
+		g.ammo = -1
+	}
 }
 
 func (g *Game) spawnAlien() {
