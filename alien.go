@@ -21,7 +21,7 @@ func NewAlien(game *Game) *Alien {
 		Object: Object{
 			x:       x,
 			y:       y,
-			speed:   1,
+			speed:   2.0,
 			sprite:  '✹',
 			fgColor: color.ColorAlien,
 		},
@@ -39,10 +39,15 @@ func (a *Alien) move(t Timing, c Coords) {
 	dist := vector.Mag(dx, dy)
 	a.dx, a.dy = vector.Norm(dx, dy)
 
+	reaches := false
+
 	if dist > 1.0 && a.energy > 0 {
 		a.Object.move(t, c)
-		a.reaches = false
-	} else {
-		a.reaches = true
 	}
+
+	if dist <= 1.0 && a.energy > 0 {
+		reaches = true
+	}
+
+	a.reaches = reaches
 }
