@@ -53,6 +53,8 @@ type Game struct {
 	score  int
 	health float64
 	ammo   int
+	gun    Gun
+	fireT  time.Time
 	noise  opensimplex.Noise
 }
 
@@ -91,6 +93,7 @@ func (g *Game) reset() {
 	g.health = 100.0
 	g.score = 0
 	g.ammo = 100
+	g.gun = MachineGun{}
 	g.mouseDown = false
 	g.player = NewPlayer(g, 10, 10)
 	g.aliens = []*Alien{}
@@ -123,6 +126,12 @@ func (g *Game) handleTrigger() {
 	if !g.mouseDown {
 		return
 	}
+
+	if time.Since(g.fireT) < g.gun.Delay() {
+		return
+	}
+
+	g.fireT = time.Now()
 
 	dx := float64(g.mouseX) - g.player.x
 	dy := float64(g.mouseY) - g.player.y
