@@ -35,37 +35,38 @@ func (g *Game) drawHud() {
 
 	g.ResetStyle()
 
-	var textX, textY int
-
 	// Title
 	g.DrawText(1, 0, "Kepler 22t")
 
+	// Right aligned indicators
+	var textX, textY int
+	textX = g.width
+	printRight := func(s string) {
+		textX -= utf8.RuneCountInString(s)
+		g.DrawText(textX, textY, s)
+	}
+	printLeft := func(s string) {
+		g.DrawText(textX, textY, s)
+		textX += utf8.RuneCountInString(s)
+	}
+
 	// Score
-	score := fmt.Sprintf(" %d", g.score)
-	textX = g.width - 1 - utf8.RuneCountInString(score)
 	g.Foreground(color.ColorWhite)
-	g.DrawText(textX, 0, score)
-	textX--
+	printRight(fmt.Sprintf(" %d ", g.score))
 	g.Foreground(color.ColorAlien)
-	g.DrawText(textX, 0, "☠")
+	printRight("☠")
 	g.ResetStyle()
 
 	// Health
-	health := fmt.Sprintf(" %d ", int(math.Round(g.health)))
-	textX -= 1 + utf8.RuneCountInString(health)
-	g.DrawText(textX, 0, health)
-	textX--
+	printRight(fmt.Sprintf(" %d ", int(math.Round(g.health))))
 	g.Foreground(color.ColorCrossRed)
-	g.DrawText(textX, 0, "✚")
+	printRight("✚")
 	g.ResetStyle()
 
 	// Ammo
-	ammo := fmt.Sprintf(" %d ", g.ammo)
-	textX -= 1 + utf8.RuneCountInString(ammo)
-	g.DrawText(textX, 0, ammo)
-	textX--
+	printRight(fmt.Sprintf(" %d ", g.ammo))
 	g.Foreground(color.ColorAmber)
-	g.DrawText(textX, 0, "⁍")
+	printRight("⁍")
 	g.ResetStyle()
 
 	// Game over
@@ -82,8 +83,11 @@ func (g *Game) drawHud() {
 		g.DrawText(textX, textY, m)
 		g.ResetStyle()
 	}
-	// Stats
-	g.DrawText(2, g.height-1, fmt.Sprintf("FPS %0.2f", float64(time.Second/g.deltaT)))
-	// Debug log
-	//g.drawText(22, g.height-1, fmt.Sprintf(" Color %d %x ", g.screen.Colors(), style.Hsl2Rgb(242, 26, 43)))
+
+	// Debug
+	textX = 1
+	textY = g.height - 1
+	printLeft(fmt.Sprintf("FPS %5.1f | ", float64(time.Second/g.deltaT)))
+	printLeft(fmt.Sprintf("Aliens %d | ", len(g.aliens)))
+	printLeft(fmt.Sprintf("Bullets %d ", len(g.bullets)))
 }
