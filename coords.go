@@ -11,6 +11,7 @@ type Coords interface {
 	MouseY() int
 	PlayerX() float64
 	PlayerY() float64
+	OutOfScreen(x, y int) bool
 }
 
 func (g *Game) Width() int {

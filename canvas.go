@@ -11,7 +11,6 @@ type Canvas interface {
 	ResetStyle()
 	Background(c color.Color)
 	Foreground(c color.Color)
-	OutOfScreen(x, y int) bool
 	PutChar(x, y int, r rune)
 	PatchChar(x, y int, r rune)
 	PutColor(x, y int)

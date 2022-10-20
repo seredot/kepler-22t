@@ -22,13 +22,13 @@ func (g *Game) checkCollisions() {
 		// Check if bullets hit the alien
 		for _, b := range g.bullets {
 			if a.energy > 0 && !b.hasHit && math.Abs(b.x-a.x) < HitRange && math.Abs(b.y-a.y) < HitRange {
-				a.energy = math.Max(0, a.energy-b.damage)
+				a.getDamage(b.damage)
 				a.fgColor = color.ColorAlien.Blend(color.Color{R: 0, G: 0, B: 0, A: 0.7 * (1 - a.energy/a.maxEnergy)})
 				b.hit()
 				g.addEffects(NewRedSpill(a.x, a.y))
-				if a.energy <= 0 {
+
+				if a.dead {
 					g.score++
-					a.die()
 				}
 			}
 		}

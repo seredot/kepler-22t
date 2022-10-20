@@ -1,6 +1,7 @@
 package main
 
 import (
+	"math"
 	"time"
 
 	"github.com/seredot/kepler-22t/color"
@@ -13,6 +14,7 @@ type Alien struct {
 	energy    float64
 	damage    float64 // damage per second
 	reaches   bool    // player is in reach and getting damage
+	dead      bool
 }
 
 func NewAlien(game *Game) *Alien {
@@ -43,8 +45,18 @@ func (a *Alien) move(t Timing, c Coords) {
 
 	reaches := false
 
+	// Run away if wounded
+	if a.energy < 30 && a.speed > 0 {
+		a.dx *= -1
+		a.dy *= -1
+	}
+
 	if dist > 1.0 && a.energy > 0 {
 		a.Object.move(t, c)
+	}
+
+	if c.OutOfScreen(a.scrX(), a.scrY()) {
+		a.removeIn(0)
 	}
 
 	if dist <= 1.0 && a.energy > 0 {
@@ -54,7 +66,20 @@ func (a *Alien) move(t Timing, c Coords) {
 	a.reaches = reaches
 }
 
+func (a *Alien) getDamage(d float64) {
+	a.energy = math.Max(0, a.energy-d)
+
+	if a.energy < 50 {
+		a.sprite = '⚈'
+	}
+
+	if a.energy <= 0 {
+		a.die()
+	}
+}
+
 func (a *Alien) die() {
+	a.dead = true
 	a.fgColor = color.ColorBlack
 	a.sprite = '☠'
 	a.speed = 0
