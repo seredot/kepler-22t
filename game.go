@@ -225,22 +225,24 @@ func (g *Game) Loop() {
 			return
 		}
 
-		g.resetScreen()
+		// Simulate
 		g.spawnAlien()
 		g.handleTrigger()
 		g.moveAliens()
-		g.drawAliens()
 		g.moveBullets()
-		g.drawBullets()
 		g.player.move(g.timing, g.coords)
-		g.player.draw(g.canvas)
 		g.checkCollisions()
 		g.moveEffects()
+
+		// Render
+		g.resetScreen()
+		g.drawAliens()
+		g.drawBullets()
+		g.player.draw(g.canvas)
 		g.drawEffects()
 		g.drawFog()
 		g.drawAimPointer()
 		g.drawHud()
-
 		g.frame++
 		g.sync()
 
