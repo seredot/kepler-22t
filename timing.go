@@ -12,5 +12,5 @@ func (g *Game) Frame() int {
 }
 
 func (g *Game) DeltaT() time.Duration {
-	return g.deltaT
+	return g.simuDelta
 }

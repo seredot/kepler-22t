@@ -98,7 +98,7 @@ func (g *Game) drawHud() {
 	// Debug
 	textX = 1
 	textY = g.height - 1
-	printLeft(fmt.Sprintf("FPS %5.1f | ", float64(time.Second/g.deltaT)))
+	printLeft(fmt.Sprintf("FPS %5.1f | ", float64(time.Second/g.renderDelta)))
 	printLeft(fmt.Sprintf("Aliens %d | ", len(g.aliens)))
 	printLeft(fmt.Sprintf("Bullets %d ", len(g.bullets)))
 }

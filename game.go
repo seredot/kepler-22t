@@ -16,6 +16,8 @@ const (
 	GameOver
 )
 
+const MaxFPS = 50.0
+
 type Game struct {
 	// Canvas
 	canvas  Canvas
@@ -36,10 +38,11 @@ type Game struct {
 	mouseDown bool
 
 	// Timing
-	timing Timing
-	frame  int
-	totalT time.Duration
-	deltaT time.Duration
+	timing      Timing
+	frame       int           // frame counter
+	totalT      time.Duration // total play
+	simuDelta   time.Duration // since simulation iter
+	renderDelta time.Duration // since frame render
 
 	// Objects
 	player  *Player
@@ -145,7 +148,7 @@ func (g *Game) handleTrigger() {
 }
 
 func (g *Game) spawnAlien() {
-	if g.frame%100 == 0 {
+	if g.frame%300 == 0 {
 		g.aliens = append(g.aliens, NewAlien(g))
 	}
 }
@@ -218,7 +221,9 @@ func (g *Game) resetScreen() {
 
 func (g *Game) Loop() {
 	lastFrameT := time.Now()
-	g.deltaT = 10 * time.Millisecond
+	lastRenderT := time.Now()
+	g.simuDelta = 10 * time.Millisecond
+	g.renderDelta = 10 * time.Millisecond
 
 	for {
 		if !g.processInput() {
@@ -235,27 +240,31 @@ func (g *Game) Loop() {
 		g.moveEffects()
 
 		// Render
-		g.resetScreen()
-		g.drawAliens()
-		g.drawBullets()
-		g.player.draw(g.canvas)
-		g.drawEffects()
-		g.drawFog()
-		g.drawAimPointer()
-		g.drawHud()
-		g.frame++
-		g.sync()
-
-		// Calculate delta time between frames
-		now := time.Now()
-		g.deltaT = now.Sub(lastFrameT)
-		g.totalT = g.totalT + g.deltaT
-		lastFrameT = now
-		if g.deltaT > 100*time.Millisecond {
-			g.deltaT = 100 * time.Millisecond
+		if time.Since(lastRenderT) >= (time.Second / MaxFPS) {
+			g.renderDelta = time.Since(lastRenderT)
+			g.resetScreen()
+			g.drawAliens()
+			g.drawBullets()
+			g.player.draw(g.canvas)
+			g.drawEffects()
+			g.drawFog()
+			g.drawAimPointer()
+			g.drawHud()
+			g.sync()
+			lastRenderT = time.Now()
 		}
 
-		// Limit to 30 fps
-		time.Sleep((33 * time.Millisecond) - g.deltaT)
+		// Calculate delta time between simulation frames
+		g.frame++
+		now := time.Now()
+		g.simuDelta = now.Sub(lastFrameT)
+		if g.simuDelta > 100*time.Millisecond {
+			g.simuDelta = 100 * time.Millisecond
+		}
+		g.totalT = g.totalT + g.simuDelta
+		lastFrameT = now
+
+		// 100 simulation frames
+		time.Sleep(10 * time.Millisecond)
 	}
 }
