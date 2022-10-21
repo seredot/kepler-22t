@@ -20,7 +20,7 @@ func (g *Game) drawFog() {
 				float64(y)/zoom+seconds*0.4,
 				seconds,
 			)
-			c := color.Color{R: .8, G: .6, B: 1, A: alpha}
+			c := color.Color{R: .6, G: 1, B: .6, A: alpha}
 			g.Background(c)
 			g.Foreground(c)
 
