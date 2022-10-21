@@ -7,7 +7,6 @@ import (
 	"github.com/gdamore/tcell/v2"
 	opensimplex "github.com/ojrac/opensimplex-go"
 	"github.com/seredot/kepler-22t/color"
-	"github.com/seredot/kepler-22t/vector"
 )
 
 type GameState int
@@ -135,10 +134,7 @@ func (g *Game) handleTrigger() {
 		g.fireT = time.Now()
 		g.ammo--
 
-		dx := float64(g.mouseX) - g.player.x
-		dy := float64(g.mouseY) - g.player.y
-		dx, dy = vector.Norm(dx, dy)
-		g.bullets = append(g.bullets, NewBullet(g.player.x, g.player.y, dx, dy, 30))
+		g.bullets = append(g.bullets, g.gun.Fire(g)...)
 		g.addEffects(NewGunFlash(g.player.x, g.player.y)...)
 	}
 
