@@ -1,18 +1,4 @@
-package main
-
-type Coords interface {
-	Width() int
-	Height() int
-	Left() int
-	Right() int
-	Top() int
-	Bottom() int
-	MouseX() int
-	MouseY() int
-	PlayerX() float64
-	PlayerY() float64
-	OutOfScreen(x, y int) bool
-}
+package game
 
 func (g *Game) Width() int {
 	return g.width
@@ -47,9 +33,9 @@ func (g *Game) MouseY() int {
 }
 
 func (g *Game) PlayerX() float64 {
-	return g.player.x
+	return g.player.X
 }
 
 func (g *Game) PlayerY() float64 {
-	return g.player.y
+	return g.player.Y
 }

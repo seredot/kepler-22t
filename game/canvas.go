@@ -1,21 +1,9 @@
-package main
+package game
 
 import (
 	"github.com/gdamore/tcell/v2"
 	"github.com/seredot/kepler-22t/color"
 )
-
-type Canvas interface {
-	Coords
-
-	ResetStyle()
-	Background(c color.Color)
-	Foreground(c color.Color)
-	PutChar(x, y int, r rune)
-	PatchChar(x, y int, r rune)
-	PutColor(x, y int)
-	DrawText(x, y int, text string)
-}
 
 type Cell struct {
 	fgColor color.Color

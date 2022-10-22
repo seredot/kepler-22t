@@ -1,6 +1,8 @@
 package main
 
+import "github.com/seredot/kepler-22t/game"
+
 func main() {
-	g := NewGame()
+	g := game.NewGame()
 	g.Loop()
 }

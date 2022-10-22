@@ -1,4 +1,4 @@
-package main
+package game
 
 import (
 	"log"
@@ -7,6 +7,9 @@ import (
 	"github.com/gdamore/tcell/v2"
 	opensimplex "github.com/ojrac/opensimplex-go"
 	"github.com/seredot/kepler-22t/color"
+	"github.com/seredot/kepler-22t/gun"
+	"github.com/seredot/kepler-22t/object"
+	"github.com/seredot/kepler-22t/screen"
 )
 
 type GameState int
@@ -20,13 +23,13 @@ const MaxFPS = 50.0
 
 type Game struct {
 	// Canvas
-	canvas  Canvas
+	canvas  screen.Canvas
 	cells   []Cell
 	screen  tcell.Screen
 	fgColor color.Color
 	bgColor color.Color
 
-	coords    Coords
+	coords    screen.Coords
 	width     int // screen width
 	height    int // screen height
 	left      int // left most playable area
@@ -38,24 +41,23 @@ type Game struct {
 	mouseDown bool
 
 	// Timing
-	timing      Timing
 	frame       int           // frame counter
 	totalT      time.Duration // total play
 	simuDelta   time.Duration // since simulation iter
 	renderDelta time.Duration // since frame render
 
 	// Objects
-	player  *Player
-	aliens  []*Alien
-	bullets []*Bullet
-	effects []*Effect
+	player  *object.Player
+	aliens  []*object.Alien
+	bullets []*object.Bullet
+	effects []*object.Effect
 
 	// Misc
 	state  GameState
 	score  int
 	health float64
 	ammo   int
-	gun    Gun
+	gun    gun.Gun
 	fireT  time.Time
 	noise  opensimplex.Noise
 }
@@ -63,7 +65,6 @@ type Game struct {
 func NewGame() *Game {
 	g := &Game{}
 
-	g.timing = g
 	g.coords = g
 	g.canvas = g
 
@@ -95,11 +96,11 @@ func (g *Game) reset() {
 	g.health = 100.0
 	g.score = 0
 	g.ammo = 30
-	g.gun = MachineGun{}
+	g.gun = gun.NewMachineGun()
 	g.mouseDown = false
-	g.player = NewPlayer(g, 10, 10)
-	g.aliens = []*Alien{}
-	g.bullets = []*Bullet{}
+	g.player = object.NewPlayer(10, 10)
+	g.aliens = []*object.Alien{}
+	g.bullets = []*object.Bullet{}
 	g.state = Playing
 }
 
@@ -124,6 +125,18 @@ func (g *Game) calcScreenSize() {
 	g.bottom = g.height - 2
 }
 
+func (g *Game) Frame() int {
+	return g.frame
+}
+
+func (g *Game) DeltaT() time.Duration {
+	return g.simuDelta
+}
+
+func (g *Game) Noise() opensimplex.Noise {
+	return g.noise
+}
+
 func (g *Game) handleTrigger() {
 	if !g.mouseDown {
 		return
@@ -138,27 +151,27 @@ func (g *Game) handleTrigger() {
 		g.ammo--
 
 		g.bullets = append(g.bullets, g.gun.Fire(g)...)
-		g.addEffects(NewGunFlash(g.player.x, g.player.y)...)
+		g.addEffects(object.NewGunFlash(g.player.X, g.player.Y)...)
 	}
 
 	if g.ammo <= 0 {
-		g.gun = Pistol{}
+		g.gun = gun.NewPistol()
 		g.ammo = -1
 	}
 }
 
 func (g *Game) spawnAlien() {
 	if g.frame%300 == 0 {
-		g.aliens = append(g.aliens, NewAlien(g))
+		g.aliens = append(g.aliens, object.NewAlien(g))
 	}
 }
 
 func (g *Game) moveAliens() {
-	next := make([]*Alien, 0, len(g.aliens))
+	next := make([]*object.Alien, 0, len(g.aliens))
 
 	for _, a := range g.aliens {
-		a.move(g.timing, g.coords)
-		if !a.removed {
+		a.Move(g.coords)
+		if !a.Removed {
 			next = append(next, a)
 		}
 	}
@@ -168,16 +181,16 @@ func (g *Game) moveAliens() {
 
 func (g *Game) drawAliens() {
 	for _, a := range g.aliens {
-		a.draw(g.canvas)
+		a.Draw(g.canvas)
 	}
 }
 
 func (g *Game) moveBullets() {
-	next := make([]*Bullet, 0, len(g.bullets))
+	next := make([]*object.Bullet, 0, len(g.bullets))
 
 	for _, b := range g.bullets {
-		b.move(g.timing, g.coords)
-		if !b.removed {
+		b.Move(g.canvas)
+		if !b.Removed {
 			next = append(next, b)
 		}
 	}
@@ -187,20 +200,20 @@ func (g *Game) moveBullets() {
 
 func (g *Game) drawBullets() {
 	for _, b := range g.bullets {
-		b.draw(g.canvas)
+		b.Draw(g.canvas)
 	}
 }
 
-func (g *Game) addEffects(elems ...*Effect) {
+func (g *Game) addEffects(elems ...*object.Effect) {
 	g.effects = append(g.effects, elems...)
 }
 
 func (g *Game) moveEffects() {
-	next := make([]*Effect, 0, len(g.effects))
+	next := make([]*object.Effect, 0, len(g.effects))
 
 	for _, e := range g.effects {
-		e.move(g.timing, g.coords)
-		if !e.removed {
+		e.Move(g.canvas)
+		if !e.Removed {
 			next = append(next, e)
 		}
 	}
@@ -210,7 +223,7 @@ func (g *Game) moveEffects() {
 
 func (g *Game) drawEffects() {
 	for _, e := range g.effects {
-		e.draw(g.canvas)
+		e.Draw(g.canvas)
 	}
 }
 
@@ -235,7 +248,7 @@ func (g *Game) Loop() {
 		g.handleTrigger()
 		g.moveAliens()
 		g.moveBullets()
-		g.player.move(g.timing, g.coords)
+		g.player.Move(g.canvas)
 		g.checkCollisions()
 		g.moveEffects()
 
@@ -245,7 +258,7 @@ func (g *Game) Loop() {
 			g.resetScreen()
 			g.drawAliens()
 			g.drawBullets()
-			g.player.draw(g.canvas)
+			g.player.Draw(g.canvas)
 			g.drawEffects()
 			g.drawFog()
 			g.drawAimPointer()

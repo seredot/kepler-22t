@@ -1,4 +1,4 @@
-package main
+package game
 
 import "github.com/seredot/kepler-22t/color"
 
