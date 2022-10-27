@@ -9,7 +9,7 @@ func (g *Game) drawAimPointer() {
 
 	g.ResetStyle()
 	g.Foreground(color.ColorPointer)
-	g.PatchChar(g.mouseX-1, g.mouseY, '❯')
-	g.PatchChar(g.mouseX+1, g.mouseY, '❮')
+	g.PatchChar(g.mouseX-1, g.mouseY, '⨴')
+	g.PatchChar(g.mouseX+1, g.mouseY, '⨵')
 	g.ResetStyle()
 }
