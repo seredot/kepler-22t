@@ -20,7 +20,7 @@ var (
 	ColorBullet      = Color{1, 1, 0, 1}
 	ColorAlien       = Color{0, .7, .1, 1}
 	ColorRedSpill    = Color{1, 0, 0, 0.2}
-	ColorBox         = Color{.259, .475, .282, 1}
+	ColorBox         = Color{.22, .565, .749, 1}
 )
 
 func NewColorIntRGBA(r, g, b, a uint64) Color {
