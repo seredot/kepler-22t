@@ -2,6 +2,7 @@ package game
 
 import (
 	"log"
+	"math/rand"
 	"time"
 
 	"github.com/gdamore/tcell/v2"
@@ -47,10 +48,11 @@ type Game struct {
 	renderDelta time.Duration // since frame render
 
 	// Objects
-	player  *object.Player
-	aliens  []*object.Alien
-	bullets []*object.Bullet
-	effects []*object.Effect
+	player   *object.Player
+	aliens   []*object.Alien
+	supplies []*gun.SupplyBox
+	bullets  []*object.Bullet
+	effects  []*object.Effect
 
 	// Misc
 	state  GameState
@@ -100,6 +102,7 @@ func (g *Game) reset() {
 	g.mouseDown = false
 	g.player = object.NewPlayer(10, 10)
 	g.aliens = []*object.Alien{}
+	g.supplies = []*gun.SupplyBox{}
 	g.bullets = []*object.Bullet{}
 	g.state = Playing
 }
@@ -166,6 +169,34 @@ func (g *Game) spawnAlien() {
 	}
 }
 
+func (g *Game) spawnSupply() {
+	if g.frame%500 != 0 {
+		return
+	}
+
+	x := float64(rand.Int() % g.Width())
+	y := float64(rand.Int() % g.Height())
+
+	boxes := []gun.SupplyBox{
+		gun.HealthBox,
+		gun.SemiAutomaticBox,
+		gun.MachineGunBox,
+		gun.GatlingGunBox,
+		gun.RailGunBox,
+		gun.FlameThrowerBox,
+		gun.PlasmaGunBox,
+		gun.NukeBox,
+		gun.FreezerBox,
+		gun.TripleDamageBox,
+	}
+
+	box := boxes[rand.Int()%len(boxes)]
+	box.X = x
+	box.Y = y
+
+	g.supplies = append(g.supplies, &box)
+}
+
 func (g *Game) moveAliens() {
 	next := make([]*object.Alien, 0, len(g.aliens))
 
@@ -182,6 +213,12 @@ func (g *Game) moveAliens() {
 func (g *Game) drawAliens() {
 	for _, a := range g.aliens {
 		a.Draw(g.canvas)
+	}
+}
+
+func (g *Game) drawSupplies() {
+	for _, s := range g.supplies {
+		s.Draw(g.canvas)
 	}
 }
 
@@ -245,6 +282,7 @@ func (g *Game) Loop() {
 
 		// Simulate
 		g.spawnAlien()
+		g.spawnSupply()
 		g.handleTrigger()
 		g.moveAliens()
 		g.moveBullets()
@@ -256,11 +294,12 @@ func (g *Game) Loop() {
 		if time.Since(lastRenderT) >= (time.Second / MaxFPS) {
 			g.renderDelta = time.Since(lastRenderT)
 			g.resetScreen()
+			g.drawFog()
+			g.drawSupplies()
 			g.drawAliens()
 			g.drawBullets()
 			g.player.Draw(g.canvas)
 			g.drawEffects()
-			g.drawFog()
 			g.drawAimPointer()
 			g.drawHud()
 			g.sync()

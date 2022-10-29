@@ -51,11 +51,11 @@ func (o *Object) Move(c screen.Coords) {
 	o.Speed = math.Max(0, o.Speed-c.DeltaT().Seconds()*o.Drag)
 }
 
-func (o *Object) scrX() int {
+func (o *Object) ScrX() int {
 	return int(math.Round(o.X))
 }
 
-func (o *Object) scrY() int {
+func (o *Object) ScrY() int {
 	return int(math.Round(o.Y))
 }
 
@@ -63,6 +63,6 @@ func (o *Object) Draw(c screen.Canvas) {
 	c.ResetStyle()
 	c.Foreground(o.FgColor)
 	c.Background(o.BgColor)
-	c.PatchChar(o.scrX(), o.scrY(), o.Sprite)
+	c.PatchChar(o.ScrX(), o.ScrY(), o.Sprite)
 	c.ResetStyle()
 }

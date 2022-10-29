@@ -4,9 +4,9 @@
 
 ### Guns
 
-- Pistol.
+- Pistol. done
 - Semi automatic gun.
-- Machine gun.
+- Machine gun. done
 - Gatling gun.
 - Hand grenade.
 - Rail gun.
@@ -18,9 +18,9 @@
 
 ### Other
 
-- Gun/ammo display.
-- Alien movement.
-- Player health, damage, effect.
+- Gun/ammo display. done
+- Alien movement. done
+- Player health done, damage done, effect.
+- Alien health, damage, effect. done
 - Health booster.
-- Alien health, damage, effect.
 - Scrolling screen?

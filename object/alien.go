@@ -56,7 +56,7 @@ func (a *Alien) Move(c screen.Coords) {
 		a.Object.Move(c)
 	}
 
-	if c.OutOfScreen(a.scrX(), a.scrY()) {
+	if c.OutOfScreen(a.ScrX(), a.ScrY()) {
 		a.removeIn(0)
 	}
 

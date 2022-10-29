@@ -7,6 +7,7 @@ import "github.com/seredot/kepler-22t/color"
 // slices of Z axis over time.
 func (g *Game) drawFog() {
 	g.ResetStyle()
+	g.Foreground(color.ColorTransparent)
 
 	zoom := 8.0
 	ambient := 0.15
@@ -22,7 +23,6 @@ func (g *Game) drawFog() {
 			)
 			c := color.Color{R: .6, G: 1, B: .6, A: alpha}
 			g.Background(c)
-			g.Foreground(c)
 
 			g.PutColor(x, y)
 		}

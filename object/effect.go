@@ -38,7 +38,7 @@ func (e *Effect) Draw(c screen.Canvas) {
 	c.ResetStyle()
 	c.Foreground(e.FgColor)
 	c.Background(e.BgColor)
-	c.PutColor(e.scrX(), e.scrY())
+	c.PutColor(e.ScrX(), e.ScrY())
 	c.ResetStyle()
 }
 
